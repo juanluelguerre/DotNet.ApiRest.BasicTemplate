@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ElGuerre.Items.API</id>
+    <version>1.0.0</version>
+    <description>
+      Build an simple API Rest project using best practices and and tests for it using moq and autofixture
+    </description>
+    <authors>Juan Luis Guerrero Minero</authors>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>  
+   <files>
+    <file src="**" exclude="**\*.dll;**\*.designer.cs;**\*.pdb;**\*.user;**\*.vspscc;bin\*.cs;bin\*.aspx;bin\*.config;bin\*.asax;bin\*.pubxml;.git\**\*.*;.vs\**\*.*;*.exe" />    
+  </files>
+</package>
