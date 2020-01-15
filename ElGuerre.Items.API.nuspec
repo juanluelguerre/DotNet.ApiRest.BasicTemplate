@@ -12,6 +12,6 @@
     </packageTypes>
   </metadata>  
    <files>
-    <file src="**" exclude="**\*.dll;**\*.designer.cs;**\*.pdb;**\*.user;**\*.vspscc;bin\*.cs;bin\*.aspx;bin\*.config;bin\*.asax;bin\*.pubxml;.git\**\*.*;.vs\**\*.*;*.exe" />    
+    <file src="**" exclude="**\*.dll;**\*.designer.cs;**\*.pdb;**\*.user;**\*.vspscc;**\bin\*.cs;**\bin\*.aspx;**\bin\*.config;**\bin\*.asax;**\bin\*.pubxml;**\.git\**\*.*;**\.vs\**\*.*;**\*.exe" />
   </files>
 </package>

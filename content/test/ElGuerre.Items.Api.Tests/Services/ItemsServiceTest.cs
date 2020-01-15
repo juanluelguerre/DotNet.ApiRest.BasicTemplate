@@ -1,13 +1,5 @@
-﻿using ElGuerre.Items.Api.Tests;
-using ElGuerre.Items.Api.Application.Models;
-using ElGuerre.Items.Api.Application.Services;
-using ElGuerre.Items.Api.Domain;
-using ElGuerre.Items.Api.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using ElGuerre.Items.Api.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace ElGuerre.Items.Api.Tests.Services
@@ -22,6 +14,7 @@ namespace ElGuerre.Items.Api.Tests.Services
         }        
 
         [Theory]
+        [Trait("Category", "Services")]        
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(99)]
@@ -34,6 +27,7 @@ namespace ElGuerre.Items.Api.Tests.Services
         }
 
         [Fact]
+        [Trait("Category", "Services")]
         public void GetItem_LessthanZero()
         {
             var item = itemsService.GetItem(-1);

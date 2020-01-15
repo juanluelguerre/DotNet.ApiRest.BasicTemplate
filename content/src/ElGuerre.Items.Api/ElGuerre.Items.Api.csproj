@@ -6,7 +6,12 @@
 		<UserSecretsId>3c6faff2-52e0-417a-a2bc-489ddc3b954f</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Copyright>JuanluElGuerre</Copyright>
+		<PackageProjectUrl></PackageProjectUrl>
+		<RepositoryUrl>https://github.com/juanluelguerre/ApiNetCoreBasicTemplate</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<PackageTags>netcore, templates</PackageTags>    
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
