@@ -1,14 +1,19 @@
-﻿using System;
+﻿using ElGuerre.Items.Api.Application.Extensions;
+using ElGuerre.Items.Api.Domain;
+using ElGuerre.Items.Api.Infrastructure;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Events;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Events;
 
 namespace ElGuerre.Items.Api
 {
@@ -29,17 +34,17 @@ namespace ElGuerre.Items.Api
 				var host = BuildWebHost(configuration, args);
 
 				Log.Information("Applying migrations ({ApplicationContext})...", AppName);
-				//host.MigrateDbContext<ItemsContext>((context, services) =>
-				//{
-				//	var env = services.GetService<IHostingEnvironment>();
-				//	var settings = services.GetService<IOptions<AppSettings>>();
-				//	var logger = services.GetService<ILogger<ItemsContextSeed>>();
 
-				//	//new ItemsContextSeed()
-				//	//	.SeedAsync(context, env, settings, logger)
-				//	//	.Wait();
-				//});
-				// .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+				host.MigrateDbContext<ItemsContext>((context, services) =>
+				{
+					var env = services.GetService<IHostingEnvironment>();
+					var settings = services.GetService<IOptions<AppSettings>>();
+					var logger = services.GetService<ILogger<ItemsContextSeed>>();
+
+					new ItemsContextSeed()
+						.SeedAsync(context, env, settings, logger)
+						.Wait();
+				});
 
 				Log.Information("Starting web host ({ApplicationContext})...", AppName);
 				host.Run();
@@ -79,7 +84,7 @@ namespace ElGuerre.Items.Api
 				.MinimumLevel.Information()
 				.Enrich.WithProperty("ApplicationContext", AppName)
 				.Enrich.FromLogContext()
-				.WriteTo.Console()
+				// .WriteTo.Console()
 				.ReadFrom.Configuration(configuration)
 				.CreateLogger();
 		}

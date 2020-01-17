@@ -23,23 +23,24 @@ namespace ElGuerre.Items.Api.Infrastructure
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {            
-            base.OnModelCreating(builder);
+        {
+            base.OnModelCreating(builder);            
 
             // Shadows Properties to Audit columns: https://docs.microsoft.com/en-us/ef/core/modeling/shadow-properties
+            // Set Shadows Properties for all entities (tables) in the DB Model.
             builder.Model.GetEntityTypes().ToList()
                .ForEach(entityType =>
                {
                    builder.Entity(entityType.ClrType).Property("Id").ForSqlServerUseSequenceHiLo(string.Format("{0}SequenceHiLo", entityType.ClrType.Name));
                    builder.Entity(entityType.ClrType).Property<DateTime?>("LastUpdated");
-                   builder.Entity(entityType.ClrType).Property<string>("CreationDate");
+                   builder.Entity(entityType.ClrType).Property<DateTime>("CreationDate");
                });
 
-            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
+            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);            
         }
 
-
         public virtual DbSet<ItemEntity> Items { get; set; }
+
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -81,4 +82,4 @@ namespace ElGuerre.Items.Api.Infrastructure
             return new ItemsContext(builder.Options);
         }
     }
- }
+}

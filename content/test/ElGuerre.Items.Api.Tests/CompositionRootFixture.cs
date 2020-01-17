@@ -4,6 +4,7 @@ using ElGuerre.Items.Api.Application.Services;
 using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Domain.Interfaces;
 using ElGuerre.Items.Api.Infrastructure;
+using ElGuerre.Items.Api.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,6 +72,7 @@ namespace ElGuerre.Items.Api.Tests
             //    .Returns(MockHelper.GetEntityMock());
 
             // Other services/interfaces.
+            Services.AddTransient<IItemsRepository, ItemsRepository>();
             Services.AddTransient<IItemsService, ItemsService>();
             // Services.AddTransient(x => repository.Object);
         }

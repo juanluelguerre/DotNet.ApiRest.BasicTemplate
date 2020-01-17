@@ -7,6 +7,14 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Copyright>JuanluElGuerre</Copyright>
+		<PackageProjectUrl></PackageProjectUrl>
+		<RepositoryUrl>https://github.com/juanluelguerre/ApiNetCoreBasicTemplate</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<PackageTags>netcore, templates</PackageTags>
+		<Company>juanluelguerre</Company>
+		<Authors>juanluelguerre</Authors>
+		<Product>ElGuerre.Items.API</Product>    
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,6 +46,10 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
 		<PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
 		<PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.2.0.14119">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
 	</ItemGroup>
@@ -45,6 +57,18 @@
 	<ItemGroup>
 		<Folder Include="Infrastructure\Middlewares\" />
 		<Folder Include="Infrastructure\Providers\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="appsettings.Development.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="appsettings.Tests.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>

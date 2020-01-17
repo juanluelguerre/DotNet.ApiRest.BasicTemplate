@@ -10,5 +10,6 @@ namespace ElGuerre.Items.Api.Application.Services
     {
         ItemModel GetItem(int id);
         List<ItemModel> GetItems();
+        Task<int> UpdateAsync(ItemModel model);
     }
 }
