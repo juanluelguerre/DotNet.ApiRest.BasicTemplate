@@ -31,6 +31,8 @@ namespace ElGuerre.Items.Api.Controllers
         /// <returns>Item</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ItemModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public IActionResult GetItem(int id)
         {
             return Ok(_itemsService.GetItem(id));
@@ -42,9 +44,26 @@ namespace ElGuerre.Items.Api.Controllers
         /// <returns>List of items found</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<ItemModel>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public IActionResult GetItems()
         {
             return Ok(_itemsService.GetItems());
+        }
+
+
+        /// <summary>
+        /// Get full list of items
+        /// </summary>        
+        /// <returns>List of items found</returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Update([FromBody] ItemModel model)
+        {
+            var result = await _itemsService.UpdateAsync(model);
+            return Ok(result);
         }
     }
 }

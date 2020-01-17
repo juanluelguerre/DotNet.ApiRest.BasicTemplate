@@ -77,7 +77,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Filters
 			context.ExceptionHandled = true;
 		}
 
-		private class JsonErrorResponse
+		public class JsonErrorResponse
 		{
 			public string[] Messages { get; set; }
 

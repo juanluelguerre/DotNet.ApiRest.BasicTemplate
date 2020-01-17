@@ -69,8 +69,9 @@ dotnet ef database update --startup-project ..\src\ElGuerre.Items.Api.csproj
 - Set or updated Nuget.config properties with the password already got in the previous steps
 - `nuget.exe sources Add -Name github -Source https://nuget.pkg.github.com/juanluelguerre/index.json -username ### USERNAME ### -password ### TOKEN ###`
 
-**Note** TOKEN will be generated as follow:
-![How to generate github token](assets/GenerateToken-Github-Packages.png)
+**Note** TOKEN will be generated as follow. More details [here](https://help.github.com/en/github/managing-packages-with-github-packages/about-github-packages#about-tokens).
+
+![How to generate github token](content/assets/GenerateToken-Github-Packages.png)
 
 ### PUblish a new template version
 ```
@@ -84,15 +85,15 @@ or
 ## Azure DevOps (Artifacts)
 
 ### Generate a new token
-- %APPDATA%\NuGet\CredentialProvider.VSS.exe -U https://pkgs.dev.azure.com/XXX/_packaging/XXX/nuget/v3/index.json
+- %USERPROFILE%\.nuget\plugins\netfx\CredentialProvider.Microsoft\CredentialProvider.Microsoft.exe -U https://pkgs.dev.azure.com/JuanluElGuerre/elGuerre/_packaging/templates/nuget/v3/index.json
 
 ### Update Nuget.config
-- Update ```%APPDATA%\NuGet\NuGet.config``` and delete properties "AzrureDevOpsArtifacts".
+- Update ```%APPDATA%\NuGet\NuGet.config``` and delete properties "templates".
 - Set or updated Nuget.config properties with the password already got in the previous steps
-- `nuget.exe sources Add -Name AzrureDevOpsArtifacts -Source https://pkgs.dev.azure.com/XXX/_packaging/XXX/nuget/v3/index.json -username unused -password ### TOKEN ###`
+- `nuget.exe sources Add -Name templates -Source https://pkgs.dev.azure.com/JuanluElGuerre/elGuerre/_packaging/Templates/nuget/v3/index.json -username unused -password ### TOKEN ###`
 
 ### Publish a new template version
-- nuget.exe push -Source ElGuerre -ApiKey AzureDevOps ElGuerre.Items.API.1.0.n.nupkg
+- nuget.exe push -source templates -ApiKey AzureDevOps ElGuerre.Items.API.1.0.n.nupkg
 
 ## Install and uninstall templates
 

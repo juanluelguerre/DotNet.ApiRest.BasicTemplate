@@ -1,4 +1,5 @@
 ﻿using ElGuerre.Items.Api.Application.Models;
+using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Domain.Interfaces;
 using ElGuerre.Items.Api.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -46,6 +47,19 @@ namespace ElGuerre.Items.Api.Application.Services
             }
 
             return model;
+        }
+
+        public async Task<int> UpdateAsync(ItemModel model)
+        {
+            var entity = new ItemEntity
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = $"The id '{model.Id}' is linked to item '{model.Name}'."
+            };
+
+            var result = await _repository.UpdateAsync(entity);
+            return result;
         }
     }
 }

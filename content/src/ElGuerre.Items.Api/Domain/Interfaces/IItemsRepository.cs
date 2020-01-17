@@ -9,5 +9,6 @@ namespace ElGuerre.Items.Api.Domain.Interfaces
         ItemEntity GetByKey(int id);
         List<ItemEntity> GetAll();
         Task<List<ItemEntity>> GetAllAsync();
+        Task<int> UpdateAsync(ItemEntity entity);
     }
 }

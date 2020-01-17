@@ -38,5 +38,15 @@ namespace ElGuerre.Items.Api.Infrastructure.Repositories
             var item = _context.Items.FindAsync(id);
             return item;
         }
+
+        public async Task<int> UpdateAsync(ItemEntity entity)
+        {
+            if (!_context.Items.Any(item => item.Id == entity.Id))
+                _context.Items.Add(entity);
+            else
+                _context.Items.Update(entity);            
+
+            return await _context.SaveChangesAsync();
+        }
     }
 }
