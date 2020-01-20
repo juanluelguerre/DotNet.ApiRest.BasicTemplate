@@ -24,7 +24,7 @@ namespace ElGuerre.Items.Api.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);            
+            base.OnModelCreating(builder);
 
             // Shadows Properties to Audit columns: https://docs.microsoft.com/en-us/ef/core/modeling/shadow-properties
             // Set Shadows Properties for all entities (tables) in the DB Model.
@@ -36,7 +36,7 @@ namespace ElGuerre.Items.Api.Infrastructure
                    builder.Entity(entityType.ClrType).Property<DateTime>("CreationDate");
                });
 
-            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);            
+            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
         }
 
         public virtual DbSet<ItemEntity> Items { get; set; }

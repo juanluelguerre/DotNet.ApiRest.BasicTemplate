@@ -20,14 +20,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<WarningLevel>0</WarningLevel>
 		<OutputPath></OutputPath>
+		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>    
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Remove="IntegrationEvents\**" />
-		<Content Remove="IntegrationEvents\**" />
-		<EmbeddedResource Remove="IntegrationEvents\**" />
-		<None Remove="IntegrationEvents\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="2.2.4" />
@@ -57,18 +52,6 @@
 	<ItemGroup>
 		<Folder Include="Infrastructure\Middlewares\" />
 		<Folder Include="Infrastructure\Providers\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="appsettings.Development.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Update="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Update="appsettings.Tests.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElGuerre.Items.Api.Domain
-{  
+{
     public class ItemEntity
     {
         public int Id { get; set; }

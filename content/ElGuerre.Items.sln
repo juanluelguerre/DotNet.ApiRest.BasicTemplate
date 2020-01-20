@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElGuerre.Items.Api.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElGuerre.Items.Api", "src\ElGuerre.Items.Api\ElGuerre.Items.Api.csproj", "{843F14DF-B9E2-4928-B915-8516AA58D4B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C9EFC19-8374-43BF-A10F-8E12F4258F32}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElGuerre.Items.IntegrationTests", "test\ElGuerre.Items.IntegrationTests\ElGuerre.Items.IntegrationTests.csproj", "{8DAEB067-EDAA-451A-A240-C00D14BAB63B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElGuerre.Items.Api.IntegrationTests", "test\ElGuerre.Items.Api.IntegrationTests\ElGuerre.Items.Api.IntegrationTests.csproj", "{500753E9-C89D-4578-84A5-B378DEF6F2A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,17 +23,13 @@ Global
 		{843F14DF-B9E2-4928-B915-8516AA58D4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{843F14DF-B9E2-4928-B915-8516AA58D4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{843F14DF-B9E2-4928-B915-8516AA58D4B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DAEB067-EDAA-451A-A240-C00D14BAB63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DAEB067-EDAA-451A-A240-C00D14BAB63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DAEB067-EDAA-451A-A240-C00D14BAB63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DAEB067-EDAA-451A-A240-C00D14BAB63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{500753E9-C89D-4578-84A5-B378DEF6F2A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{500753E9-C89D-4578-84A5-B378DEF6F2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{500753E9-C89D-4578-84A5-B378DEF6F2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{500753E9-C89D-4578-84A5-B378DEF6F2A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{37153103-87FE-4F1C-9762-C982B8723DB2} = {1C9EFC19-8374-43BF-A10F-8E12F4258F32}
-		{8DAEB067-EDAA-451A-A240-C00D14BAB63B} = {1C9EFC19-8374-43BF-A10F-8E12F4258F32}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0D4382-3F82-4031-810F-AE42C95BACDD}

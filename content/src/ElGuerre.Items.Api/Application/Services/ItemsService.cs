@@ -23,6 +23,9 @@ namespace ElGuerre.Items.Api.Application.Services
 
         public ItemModel GetItem(int id)
         {
+            if (id <= 0)
+                throw new ArgumentNullException(nameof(id), "Item Id must be a possitive number.");
+
             var entity = _repository.GetByKey(id);
 
             // We can use Automapper instead 
@@ -51,6 +54,12 @@ namespace ElGuerre.Items.Api.Application.Services
 
         public async Task<int> UpdateAsync(ItemModel model)
         {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model), "Input model cannot be null.");
+
+            if (model.Id <= 0)
+                throw new ArgumentException("Item Id cannot be null or empty.", nameof(model.Id));
+
             var entity = new ItemEntity
             {
                 Id = model.Id,

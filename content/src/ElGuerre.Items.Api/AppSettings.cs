@@ -10,6 +10,6 @@ namespace ElGuerre.Items.Api
     public class AppSettings
     {
         public string DBConnectionString { get; set; }
-       
+
     }
 }
