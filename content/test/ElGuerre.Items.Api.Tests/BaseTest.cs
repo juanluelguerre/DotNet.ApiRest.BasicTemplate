@@ -3,7 +3,7 @@ using Xunit;
 
 namespace ElGuerre.Items.Api.Tests
 {
-    [ExcludeFromCodeCoverage]
+    // [ExcludeFromCodeCoverage]
     public abstract class BaseTest : IClassFixture<CompositionRootFixture>
     {
         protected readonly CompositionRootFixture Fixture;

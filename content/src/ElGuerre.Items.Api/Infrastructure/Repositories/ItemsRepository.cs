@@ -44,7 +44,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Repositories
             if (!_context.Items.Any(item => item.Id == entity.Id))
                 _context.Items.Add(entity);
             else
-                _context.Items.Update(entity);            
+                _context.Items.Update(entity);
 
             return await _context.SaveChangesAsync();
         }

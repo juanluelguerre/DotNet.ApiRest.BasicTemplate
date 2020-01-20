@@ -12,7 +12,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
             string authorizationMethod = "Bearer");
 
         Task<HttpResponseMessage> PostAsync<T>(string uri,
-            T item,                  
+            T item,
             string authorizationToken = null,
             string requestId = null,
             string authorizationMethod = "Bearer");
@@ -27,7 +27,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
 
         Task<HttpResponseMessage> PutAsync<T>(
             string uri,
-            T item,            
+            T item,
             string authorizationToken = null,
             string requestId = null,
             string authorizationMethod = "Bearer");

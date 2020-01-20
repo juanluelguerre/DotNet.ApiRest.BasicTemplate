@@ -63,7 +63,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
             var requestMessage = new HttpRequestMessage(method, uri);
 
             SetAuthorizationHeader(requestMessage);
-           
+
             requestMessage.Content =
                 new StringContent(JsonConvert.SerializeObject(item), System.Text.Encoding.UTF8, "application/json");
 
