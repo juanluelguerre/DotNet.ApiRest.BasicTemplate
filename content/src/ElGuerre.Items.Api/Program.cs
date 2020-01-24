@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace ElGuerre.Items.Api
@@ -17,7 +16,7 @@ namespace ElGuerre.Items.Api
     {
         public static readonly string Namespace = typeof(Program).Namespace;
         public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
-
+        
         public static int Main(string[] args)
         {
             var configuration = GetConfiguration();
@@ -57,13 +56,11 @@ namespace ElGuerre.Items.Api
                 Log.CloseAndFlush();
             }
         }
-
-        [Obsolete]
+        
         private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .CaptureStartupErrors(false)
-                .UseStartup<Startup>()
-                .UseApplicationInsights()
+                .UseStartup<Startup>()                
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((host, config) =>
                 {
