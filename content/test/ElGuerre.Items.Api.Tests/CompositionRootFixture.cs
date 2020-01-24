@@ -15,7 +15,7 @@ using System.Security.Principal;
 
 namespace ElGuerre.Items.Api.Tests
 {
-    // [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class CompositionRootFixture
     {
         public IServiceProvider ServiceProvider { get; private set; }

@@ -108,12 +108,9 @@ namespace ElGuerre.Items.Api
         }
     }
 
-    [SuppressMessage("NDepend",
-        "ND1400:AvoidNamespacesMutuallyDependent",
-        Justification = "Startup internal class/methods inside same file intencionally to code clarify.")]
     internal static class StartupExtensionMethods
     {
-        public static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddApplicationInsightsTelemetry(configuration);
 
@@ -127,7 +124,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
+        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
         {
             services.AddMvc(options =>
             {
@@ -167,7 +164,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions();
             services.Configure<AppSettings>(_ => configuration.GetSection(Program.AppName).Get<AppSettings>());
@@ -192,7 +189,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration, AppSettings settings)
+        internal static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration, AppSettings settings)
         {
             services.AddDbContext<ItemsContext>(options =>
             {
@@ -223,7 +220,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+        internal static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
@@ -257,7 +254,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomServices(this IServiceCollection services, bool isMock)
+        internal static IServiceCollection AddCustomServices(this IServiceCollection services, bool isMock)
         {
             services.AddHttpContextAccessor();
 
@@ -277,7 +274,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
 
@@ -302,7 +299,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomAuthentication(
+        internal static IServiceCollection AddCustomAuthentication(
             this IServiceCollection services,
             ILoggerFactory loggerFactory,
             IHostingEnvironment env,

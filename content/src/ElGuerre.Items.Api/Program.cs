@@ -1,5 +1,4 @@
 ﻿using ElGuerre.Items.Api.Application.Extensions;
-using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -8,16 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
-using Serilog.Events;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
-    public class Program
+    public static class Program
     {
         public static readonly string Namespace = typeof(Program).Namespace;
         public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
@@ -62,6 +58,7 @@ namespace ElGuerre.Items.Api
             }
         }
 
+        [Obsolete]
         private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .CaptureStartupErrors(false)

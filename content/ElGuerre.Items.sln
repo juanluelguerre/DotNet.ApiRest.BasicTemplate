@@ -34,4 +34,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0D4382-3F82-4031-810F-AE42C95BACDD}
 	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\ElGuerre.Items.ndproj"
+	EndGlobalSection
 EndGlobal
