@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +21,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -38,6 +35,9 @@ using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
+    /// <summary>
+    /// Start up class to set up services, dependency injection and so on.
+    /// </summary>
     public class Startup
     {
         public readonly IConfiguration _configuration;
@@ -54,8 +54,11 @@ namespace ElGuerre.Items.Api
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
+        /// <summary>
+        /// Called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             var isMock = _environment.IsEnvironment("Mock");
@@ -70,8 +73,12 @@ namespace ElGuerre.Items.Api
                 .AddCustomAuthentication(_loggerFactory, _environment, _configuration)
                 .AddCustomMVC(_environment);
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
+        /// <summary>
+        /// Called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -83,6 +90,9 @@ namespace ElGuerre.Items.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            if (! env.IsEnvironment("Tests"))
+                app.UseSerilogRequestLogging();
 
             app.UseHealthChecks("/liveness", new HealthCheckOptions
             {
@@ -108,6 +118,9 @@ namespace ElGuerre.Items.Api
         }
     }
 
+    /// <summary>
+    /// Internal class to extend Startup class functoinality as "custom" prefix to keep make differents with the real one.
+    /// </summary>
     internal static class StartupExtensionMethods
     {
         internal static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services, IConfiguration configuration)
@@ -142,6 +155,7 @@ namespace ElGuerre.Items.Api
                 // Custom Filter to validate BadRequests for all Controllers.
                 options.Filters.Add(typeof(ValidateModelStateFilter));
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                options.Filters.Add(typeof(ActionLoggingFilter));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddControllersAsServices();
@@ -226,28 +240,42 @@ namespace ElGuerre.Items.Api
             {
                 options.DescribeAllEnumsAsStrings();
                 options.EnableAnnotations();
-                options.SwaggerDoc("v1", new Info
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1.0.0",
                     Title = $"{Program.Namespace}",
-                    Description = $"API to expose logic for {Program.AppName} service",
-                    TermsOfService = ""
+                    Description = $"API to expose logic for {Program.AppName} service"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
                 options.AddSecurityDefinition("Bearer",
-                 new ApiKeyScheme
-                 {
-                     In = "header",
-                     Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                     Name = "Authorization",
-                     Type = "apiKey"
-                 });
+                    new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    });
 
-                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-                    { "Bearer", Enumerable.Empty<string>() },
+                // [Deprecated] in Swashbuckle 5.0
+                //options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                //    { "Bearer", Enumerable.Empty<string>() },
+                //});
+
+                // TODO: Review !
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Scheme = "Bearer",
+                            // Type = SecuritySchemeType.Http,
+                            // BearerFormat = "JWT"
+                        },
+                        Array.Empty<string>()
+                    }
                 });
             });
 

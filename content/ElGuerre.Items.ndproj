@@ -87,7 +87,9 @@
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
-  <CoverageFiles CoverageDir=".\TestResults\coverage" UncoverableAttribute="" />
+  <CoverageFiles CoverageDir=".\TestResults" UncoverableAttribute="">
+    <CoverageFile>.\TestResults\ada54529-1ef6-4711-8431-3b40141fa3e5\jguerrmi_SVQ-BNZVBG2 2020-01-24 21_25_13.coverage</CoverageFile>
+  </CoverageFiles>
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Size" ShowInReport="True">
       <Serie MetricName="# Lines of Code" MetricUnit="Loc" Color="#FF00BFFF" ChartType="Line" ScaleExp="0" />
@@ -3835,7 +3837,7 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="Architecture" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
 // <Id>ND1400:AvoidNamespacesMutuallyDependent</Id>
 
 warnif count > 0
@@ -4033,7 +4035,7 @@ select new {
 // blue and black cells.**
 //</HowToFix>
       ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid namespaces dependency cycles</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid namespaces dependency cycles</Name>
 // <Id>ND1401:AvoidNamespacesDependencyCycles</Id>
 
 warnif count > 0

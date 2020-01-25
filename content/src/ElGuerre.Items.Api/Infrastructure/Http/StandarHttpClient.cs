@@ -59,7 +59,6 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
 
             // a new StringContent must be created for each retry
             // as it is disposed after each call
-
             var requestMessage = new HttpRequestMessage(method, uri);
 
             SetAuthorizationHeader(requestMessage);
@@ -70,8 +69,6 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var requestAccepts = _client.DefaultRequestHeaders.Accept;
             requestAccepts.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
 
             if (authorizationToken != null)
             {
@@ -84,13 +81,10 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
                 requestMessage.Headers.Add("x-requestid", requestId);
             }
 
-            var response = await _client.SendAsync(requestMessage);
-
-            // raise exception if HttpResponseCode 500
-            // needed for circuit breaker to track fails
-
+            var response = await _client.SendAsync(requestMessage);            
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
+                // Raise exception if HttpResponseCode 500 needed for circuit breaker to track fails.
                 throw new HttpRequestException();
             }
 
@@ -144,8 +138,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
                         }
                 }, "file", fileName);
 
-                requestMessage.Content = form;
-                // response = await _client.PostAsync(uri, form);
+                requestMessage.Content = form;                
                 response = await _client.SendAsync(requestMessage);
 
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
@@ -198,7 +191,6 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
                 requestMessage.Headers.Add("Authorization", new List<string>() { authorizationHeader });
             }
         }
-
     }
 }
 

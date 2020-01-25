@@ -12,11 +12,26 @@ using System.IO;
 
 namespace ElGuerre.Items.Api
 {
+    /// <summary>
+    /// API Entry Point
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// Global and main Namespace using acrross the app
+        /// </summary>
         public static readonly string Namespace = typeof(Program).Namespace;
+
+        /// <summary>
+        /// Application Name stracted from Namespace using across the app to show information.
+        /// </summary>
         public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
         
+        /// <summary>
+        /// Entry Point method
+        /// </summary>
+        /// <param name="args">Arguments passed to the Api. But not used !</param>
+        /// <returns></returns>
         public static int Main(string[] args)
         {
             var configuration = GetConfiguration();
@@ -75,9 +90,9 @@ namespace ElGuerre.Items.Api
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
             return new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
+                // .MinimumLevel.Information()
+                // .Enrich.WithProperty("ApplicationContext", AppName)
+                // .Enrich.FromLogContext()
                 // .WriteTo.Console()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
