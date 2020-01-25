@@ -394,14 +394,14 @@ namespace ElGuerre.Items.Api
                                 throw new AuthenticationException("No user available");
                             }
 
-                            // TODO: Obtener y validar información adicional del usuario (según su email) y popular las Claims adecuadas para usar a lo largo del API.		                            
-                            // 1) Llmar al servicio de MdA y obtener el IdPersona (MdA)                            
-                            // 2) Implementar a nivel de Application una clase estática similar a la clase ClaimTypes
-                            // 2.1) ClaimTypesMdA.IdPersona con el valor: "http://mda.nsi/IdPersona"
-                            // 3) Crear una nueva clain con el IdPersona y añadirla a la idenditad: identity.AddClaim(new Claim(ClaimTypesMdA.ID_PERSONA, "## IdPersona ##"));
-                            // En los Controllers y en el resto de la aplicación donde haya que utlizar el IdPersona se hará vía Contex/Identity.
+                            // TODO: Get and validate additions information for user (using email) and populate Claims to use accross the API.		                            
+                            
+                            // 1) Implementar a nivel de Application una clase estática similar a la clase ClaimTypes
+                            // 1.1) ClaimTypesXXX.IdXXX with value: "http://mda.nsi/IdXXXX"
+                            // 2) Create a new Claim using IdXXX and add  idendity: identity.AddClaim(new Claim(ClaimTypesXXX.ID_XXX, "## IdXXX ##"));
+                            // Inside Controllers and the rest of the application use Contex/Identity to get IdXXX
                             //
-                            // TODO: Añadir otras Claims
+                            // Add more Claims like this:
                             // identity.AddClaim(new Claim(ClaimTypes.GivenName, yyyyy));
                             // 
 
