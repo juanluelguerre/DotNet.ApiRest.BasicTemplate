@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +21,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -38,6 +35,9 @@ using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
+    /// <summary>
+    /// Start up class to set up services, dependency injection and so on.
+    /// </summary>
     public class Startup
     {
         public readonly IConfiguration _configuration;
@@ -54,8 +54,11 @@ namespace ElGuerre.Items.Api
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
+        /// <summary>
+        /// Called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             var isMock = _environment.IsEnvironment("Mock");
@@ -70,8 +73,12 @@ namespace ElGuerre.Items.Api
                 .AddCustomAuthentication(_loggerFactory, _environment, _configuration)
                 .AddCustomMVC(_environment);
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
+        /// <summary>
+        /// Called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -83,6 +90,9 @@ namespace ElGuerre.Items.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            if (! env.IsEnvironment("Tests"))
+                app.UseSerilogRequestLogging();
 
             app.UseHealthChecks("/liveness", new HealthCheckOptions
             {
@@ -108,12 +118,12 @@ namespace ElGuerre.Items.Api
         }
     }
 
-    [SuppressMessage("NDepend",
-        "ND1400:AvoidNamespacesMutuallyDependent",
-        Justification = "Startup internal class/methods inside same file intencionally to code clarify.")]
+    /// <summary>
+    /// Internal class to extend Startup class functoinality as "custom" prefix to keep make differents with the real one.
+    /// </summary>
     internal static class StartupExtensionMethods
     {
-        public static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddApplicationInsightsTelemetry(configuration);
 
@@ -127,7 +137,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
+        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
         {
             services.AddMvc(options =>
             {
@@ -145,6 +155,7 @@ namespace ElGuerre.Items.Api
                 // Custom Filter to validate BadRequests for all Controllers.
                 options.Filters.Add(typeof(ValidateModelStateFilter));
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                options.Filters.Add(typeof(ActionLoggingFilter));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddControllersAsServices();
@@ -167,7 +178,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions();
             services.Configure<AppSettings>(_ => configuration.GetSection(Program.AppName).Get<AppSettings>());
@@ -192,7 +203,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration, AppSettings settings)
+        internal static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration, AppSettings settings)
         {
             services.AddDbContext<ItemsContext>(options =>
             {
@@ -223,41 +234,55 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+        internal static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
                 options.EnableAnnotations();
-                options.SwaggerDoc("v1", new Info
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1.0.0",
                     Title = $"{Program.Namespace}",
-                    Description = $"API to expose logic for {Program.AppName} service",
-                    TermsOfService = ""
+                    Description = $"API to expose logic for {Program.AppName} service"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
                 options.AddSecurityDefinition("Bearer",
-                 new ApiKeyScheme
-                 {
-                     In = "header",
-                     Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                     Name = "Authorization",
-                     Type = "apiKey"
-                 });
+                    new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    });
 
-                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-                    { "Bearer", Enumerable.Empty<string>() },
+                // [Deprecated] in Swashbuckle 5.0
+                //options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                //    { "Bearer", Enumerable.Empty<string>() },
+                //});
+
+                // TODO: Review !
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Scheme = "Bearer",
+                            // Type = SecuritySchemeType.Http,
+                            // BearerFormat = "JWT"
+                        },
+                        Array.Empty<string>()
+                    }
                 });
             });
 
             return services;
         }
 
-        public static IServiceCollection AddCustomServices(this IServiceCollection services, bool isMock)
+        internal static IServiceCollection AddCustomServices(this IServiceCollection services, bool isMock)
         {
             services.AddHttpContextAccessor();
 
@@ -277,7 +302,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
 
@@ -302,7 +327,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        public static IServiceCollection AddCustomAuthentication(
+        internal static IServiceCollection AddCustomAuthentication(
             this IServiceCollection services,
             ILoggerFactory loggerFactory,
             IHostingEnvironment env,
@@ -369,14 +394,14 @@ namespace ElGuerre.Items.Api
                                 throw new AuthenticationException("No user available");
                             }
 
-                            // TODO: Obtener y validar información adicional del usuario (según su email) y popular las Claims adecuadas para usar a lo largo del API.		                            
-                            // 1) Llmar al servicio de MdA y obtener el IdPersona (MdA)                            
-                            // 2) Implementar a nivel de Application una clase estática similar a la clase ClaimTypes
-                            // 2.1) ClaimTypesMdA.IdPersona con el valor: "http://mda.nsi/IdPersona"
-                            // 3) Crear una nueva clain con el IdPersona y añadirla a la idenditad: identity.AddClaim(new Claim(ClaimTypesMdA.ID_PERSONA, "## IdPersona ##"));
-                            // En los Controllers y en el resto de la aplicación donde haya que utlizar el IdPersona se hará vía Contex/Identity.
+                            // TODO: Get and validate additions information for user (using email) and populate Claims to use accross the API.		                            
+                            
+                            // 1) Implementar a nivel de Application una clase estática similar a la clase ClaimTypes
+                            // 1.1) ClaimTypesXXX.IdXXX with value: "http://mda.nsi/IdXXXX"
+                            // 2) Create a new Claim using IdXXX and add  idendity: identity.AddClaim(new Claim(ClaimTypesXXX.ID_XXX, "## IdXXX ##"));
+                            // Inside Controllers and the rest of the application use Contex/Identity to get IdXXX
                             //
-                            // TODO: Añadir otras Claims
+                            // Add more Claims like this:
                             // identity.AddClaim(new Claim(ClaimTypes.GivenName, yyyyy));
                             // 
 

@@ -1,5 +1,4 @@
 ﻿using ElGuerre.Items.Api.Application.Extensions;
-using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -8,20 +7,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
-using Serilog.Events;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
-    public class Program
+    /// <summary>
+    /// API Entry Point
+    /// </summary>
+    public static class Program
     {
+        /// <summary>
+        /// Global and main Namespace using acrross the app
+        /// </summary>
         public static readonly string Namespace = typeof(Program).Namespace;
-        public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
 
+        /// <summary>
+        /// Application Name stracted from Namespace using across the app to show information.
+        /// </summary>
+        public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
+        
+        /// <summary>
+        /// Entry Point method
+        /// </summary>
+        /// <param name="args">Arguments passed to the Api. But not used !</param>
+        /// <returns></returns>
         public static int Main(string[] args)
         {
             var configuration = GetConfiguration();
@@ -61,12 +71,11 @@ namespace ElGuerre.Items.Api
                 Log.CloseAndFlush();
             }
         }
-
+        
         private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .CaptureStartupErrors(false)
-                .UseStartup<Startup>()
-                .UseApplicationInsights()
+                .UseStartup<Startup>()                
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((host, config) =>
                 {
@@ -81,9 +90,9 @@ namespace ElGuerre.Items.Api
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
             return new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
+                // .MinimumLevel.Information()
+                // .Enrich.WithProperty("ApplicationContext", AppName)
+                // .Enrich.FromLogContext()
                 // .WriteTo.Console()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();

@@ -6,9 +6,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api.Infrastructure

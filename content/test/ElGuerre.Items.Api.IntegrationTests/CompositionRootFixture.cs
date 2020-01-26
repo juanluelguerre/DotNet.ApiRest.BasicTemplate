@@ -6,12 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 
 namespace ElGuerre.Items.Api.IntegrationTests
 {
-    // [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class CompositionRootFixture
     {
         private readonly TestServer _server;

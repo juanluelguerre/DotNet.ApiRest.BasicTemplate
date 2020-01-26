@@ -1,7 +1,7 @@
 # ElGuerre.Items.Api
-Is a SAMPLE ASP.NET Core API Rest to show and use it as a template to create new API Rest Proyects.
+Is a AspNet Core (API Rest) template to provide Best Practices and use several professional componentes and much more. Also to know how DotNet Templates work.
 
-**API project**:
+**API project structure**:
 - Application
     - Models. Models, ViewModels and DTOs used by Controllers and Services.
     - Services. Application Logic.
@@ -19,27 +19,30 @@ Is a SAMPLE ASP.NET Core API Rest to show and use it as a template to create new
     - Repositories. DB repositories to use EF easyly in an isolatted layer.
 
 **k8s folder**
-Kubernetes and helm ".YAML" configuration to publish to Kubernetes
+Kubernetes and helm ".YAML" configuration to publish API to Kubernetes.
 
 **azure folder**
-Azure resources scripts to register App in AAD.
+Azure resources scripts to register App in Azure Active Directory (AAD).
 other scripts, like ARM (Azure Resource Manager), could be added here.
 
-# Next steps
-All those new Patterns, Tools and Platforms, will be Blog Post entries in [elGuerre.com](https://elguerre.com)
-
-## Learning
+## What is going to Learn?
 1. DotNet Templates
 2. API REST using NetCore and best practices:
-    - [Serilog](https://serilog.net/) and also 'ApplicationInsight' + Serilog Extensions.
     - [Swagger](https://docs.microsoft.com/es-es/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio)
+    - [Serilog](https://serilog.net/) and also 'ApplicationInsight' + Serilog Extensions.
     - Entity Framework Core for Commands.    
     - [Automapper](https://automapper.org/). Optional to map Model/entities.
-    - HelthCheck.
-    - Authenticaction (vía AAD).
-3. Use Docker
-4. Use Kubernetes and Helm
-3. ... 
+    - Entity Framework.
+    - HelthChecks.
+    - Authenticaction (via AAD).
+3. Docker
+4. Kubernetes and Helm
+5. Azure Pipelines
+6. And much more. 
+
+# Blog
+All those new Patterns, Tools and Platforms, will be Blog Post entries in [elGuerre.com](https://elguerre.com)
+
 
 # Runnng the App
 1. Using Kestrel from Visual Studio:
@@ -60,7 +63,11 @@ dotnet ef database update --startup-project ..\src\ElGuerre.Items.Api.csproj
 # Generate and publish Template
 
 ## Package a new template version
-- `Nuget.exe pack ElGuerre.Items.API.nuspec -Version 1.0.n`
+- `Nuget.exe pack ElGuerre.ApiRest.Template.nuspec -Version 1.0.n`
+
+## Nuget.org
+`dotnet nuget push AppLogger.1.0.0.nupkg -k xxx -s https://api.nuget.org/v3/index.json`
+![Publishing packages](https://docs.microsoft.com/en-us/nuget/nuget-org/publish-a-package)
 
 ## Github (Packages)
 

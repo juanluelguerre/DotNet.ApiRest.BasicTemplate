@@ -5,10 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api.Application.Extensions
 {
@@ -16,7 +13,7 @@ namespace ElGuerre.Items.Api.Application.Extensions
     {
         private static IConfiguration Configuration { set; get; }
 
-        public static bool IsInKubernetes(this IWebHost webHost)
+        private static bool IsInKubernetes(this IWebHost webHost)
         {
             Configuration = webHost.Services.GetService<IConfiguration>();
             var orchestratorType = Configuration.GetValue<string>("OrchestratorType");

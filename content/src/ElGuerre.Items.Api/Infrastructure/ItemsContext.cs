@@ -1,5 +1,4 @@
-﻿using ElGuerre.Items.Api.Application.Models;
-using ElGuerre.Items.Api.Domain;
+﻿using ElGuerre.Items.Api.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;

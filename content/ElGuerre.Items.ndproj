@@ -1,11 +1,81 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ElGuerre.Items" Platform="DotNet" FileWrittenByProductVersion="2019.3.0.9290">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <IDEFiles>
     <IDEFile FilePath=".\ElGuerre.Items.sln" Filters="-test" Configuration="DEBUG|AnyCPU" />
   </IDEFiles>
   <Assemblies />
-  <FrameworkAssemblies />
+  <FrameworkAssemblies>
+    <Name>System.Runtime</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Core</Name>
+    <Name>Microsoft.AspNetCore.Razor.Runtime</Name>
+    <Name>Microsoft.Extensions.Configuration.UserSecrets</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>System.Diagnostics.Debug</Name>
+    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
+    <Name>Serilog</Name>
+    <Name>System.ComponentModel</Name>
+    <Name>Microsoft.Extensions.Options</Name>
+    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
+    <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Diagnostics.HealthChecks</Name>
+    <Name>Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions</Name>
+    <Name>Swashbuckle.AspNetCore.SwaggerUI</Name>
+    <Name>Microsoft.Extensions.Diagnostics.HealthChecks</Name>
+    <Name>Microsoft.AspNetCore.Authorization</Name>
+    <Name>Microsoft.AspNetCore.Cors</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
+    <Name>Microsoft.EntityFrameworkCore.InMemory</Name>
+    <Name>Microsoft.EntityFrameworkCore.SqlServer</Name>
+    <Name>Microsoft.EntityFrameworkCore</Name>
+    <Name>Swashbuckle.AspNetCore.SwaggerGen</Name>
+    <Name>Microsoft.AspNetCore.Authentication.JwtBearer</Name>
+    <Name>System.Security.Claims</Name>
+    <Name>Microsoft.AspNetCore.Authentication.AzureAD.UI</Name>
+    <Name>System.Threading.Tasks</Name>
+    <Name>Microsoft.IdentityModel.Tokens</Name>
+    <Name>System.Security.Principal</Name>
+    <Name>System.IdentityModel.Tokens.Jwt</Name>
+    <Name>Polly</Name>
+    <Name>System.Collections</Name>
+    <Name>System.Linq.Expressions</Name>
+    <Name>System.Net.Http</Name>
+    <Name>Microsoft.Extensions.Primitives</Name>
+    <Name>Swashbuckle.AspNetCore.Annotations</Name>
+    <Name>System.ComponentModel.Annotations</Name>
+    <Name>Microsoft.AspNetCore.Hosting</Name>
+    <Name>Microsoft.AspNetCore</Name>
+    <Name>Microsoft.ApplicationInsights.AspNetCore</Name>
+    <Name>System.IO.FileSystem</Name>
+    <Name>Serilog.AspNetCore</Name>
+    <Name>Serilog.Settings.Configuration</Name>
+    <Name>Microsoft.Extensions.DependencyModel</Name>
+    <Name>Microsoft.Extensions.Configuration</Name>
+    <Name>Microsoft.Extensions.Configuration.FileExtensions</Name>
+    <Name>Microsoft.Extensions.Configuration.Json</Name>
+    <Name>Microsoft.Extensions.Configuration.EnvironmentVariables</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>Microsoft.AspNetCore.Diagnostics</Name>
+    <Name>Microsoft.AspNetCore.HttpsPolicy</Name>
+    <Name>HealthChecks.UI.Client</Name>
+    <Name>Swashbuckle.AspNetCore.Swagger</Name>
+    <Name>Microsoft.AspNetCore.Authentication</Name>
+    <Name>Microsoft.ApplicationInsights.Kubernetes</Name>
+    <Name>Microsoft.AspNetCore.Mvc</Name>
+    <Name>Microsoft.AspNetCore.Http</Name>
+    <Name>System.Linq</Name>
+    <Name>System.Data.SqlClient</Name>
+    <Name>Microsoft.AspNetCore.Http.Features</Name>
+    <Name>System.Net.Security</Name>
+    <Name>Microsoft.EntityFrameworkCore.Relational</Name>
+    <Name>System.Runtime.Extensions</Name>
+    <Name>Microsoft.IdentityModel.Logging</Name>
+    <Name>System.Linq.Queryable</Name>
+    <Name>System.Net.Primitives</Name>
+    <Name>mscorlib</Name>
+  </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.2.8</Dir>
     <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.2</Dir>
@@ -17,7 +87,9 @@
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
-  <CoverageFiles CoverageDir="" UncoverableAttribute="" />
+  <CoverageFiles CoverageDir=".\TestResults" UncoverableAttribute="">
+    <CoverageFile>.\TestResults\ada54529-1ef6-4711-8431-3b40141fa3e5\jguerrmi_SVQ-BNZVBG2 2020-01-24 21_25_13.coverage</CoverageFile>
+  </CoverageFiles>
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Size" ShowInReport="True">
       <Serie MetricName="# Lines of Code" MetricUnit="Loc" Color="#FF00BFFF" ChartType="Line" ScaleExp="0" />
@@ -77,8 +149,7 @@
       <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings>
-  <Queries>
+  </ProjectDebtSettings><Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Quality Gates Evolution</Name>
 from qg in QualityGates
@@ -3766,7 +3837,7 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="Architecture" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
 // <Id>ND1400:AvoidNamespacesMutuallyDependent</Id>
 
 warnif count > 0
@@ -3964,7 +4035,7 @@ select new {
 // blue and black cells.**
 //</HowToFix>
       ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid namespaces dependency cycles</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid namespaces dependency cycles</Name>
 // <Id>ND1401:AvoidNamespacesDependencyCycles</Id>
 
 warnif count > 0
@@ -12513,6 +12584,4 @@ select new {
 //</HowToFix>]]></Query>
       </Group>
     </Group>
-  </Queries>
-  <WarnFilter />
-</NDepend>
+  </Queries></NDepend>

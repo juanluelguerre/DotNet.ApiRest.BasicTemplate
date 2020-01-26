@@ -1,8 +1,10 @@
 ﻿using ElGuerre.Items.Api.Domain;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ElGuerre.Items.Api.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class MockHelper
     {
         public static ItemEntity GetEntityMock()
