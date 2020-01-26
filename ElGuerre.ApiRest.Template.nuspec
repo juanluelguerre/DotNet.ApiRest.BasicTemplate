@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>ElGuerre.Items.API</id>
+    <id>ElGuerre.ApiRest.Template</id>
     <version>1.0.0</version>
     <description>
-      Build an simple API Rest project using best practices and and tests for it using moq and autofixture
+      Build an simple API Rest project using best practices, professional componentes: Swagger, Serilog, Entity Framewokr, Authentication (AAD), Azure Aplication Insight, Docker, Kubernetes, Helm, Azure Pipelines and much more.
     </description>
     <authors>Juan Luis Guerrero Minero</authors>
     <packageTypes>
