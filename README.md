@@ -1,6 +1,8 @@
 # ElGuerre.Items.Api
 Is a AspNet Core (API Rest) template to provide Best Practices and use several professional componentes and much more. Also to know how DotNet Templates work.
 
+![Dot Net Api Rest Basic Template](content/assets/DotNetApiRestBasicTemplate.png)
+
 **API project structure**:
 - Application
     - Models. Models, ViewModels and DTOs used by Controllers and Services.
