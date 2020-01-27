@@ -2,14 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>ElGuerre.ApiRest.Template</id>
-    <version>1.0.0</version>
+    <version>1.0.0-Beta1</version>
     <description>
       Build an simple API Rest project using best practices, professional componentes: Swagger, Serilog, Entity Framewokr, Authentication (AAD), Azure Aplication Insight, Docker, Kubernetes, Helm, Azure Pipelines and much more.
     </description>
     <authors>Juan Luis Guerrero Minero</authors>
+    <license type="file">LICENSE</license>    
     <packageTypes>
       <packageType name="Template" />
-    </packageTypes>
+    </packageTypes>    
   </metadata>  
    <files>
     <file src="**" exclude="**\*.dll;**\*.designer.cs;**\*.pdb;**\*.user;**\*.vspscc;**\bin\*.cs;**\bin\*.aspx;**\bin\*.config;**\bin\*.asax;**\bin\*.pubxml;**\.git\**\*.*;**\.vs\**\*.*;**\*.exe" />
