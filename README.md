@@ -84,12 +84,12 @@ dotnet ef database update --startup-project ..\src\ElGuerre.Items.Api.csproj
 
 ### PUblish a new template version
 ```
-dotnet nuget push "ElGuerre.Items.API.1.0.0.nupkg" --source "github"
+dotnet nuget push "ElGuerre.ApiRest.Template.1.0.0.nupkg" --source "github"
 ```
 ### Publish a new template version
-- `dotnet nuget push --source github ElGuerre.Items.API.1.0.n.nupkg`
+- `dotnet nuget push --source github ElGuerre.ApiRest.Template.1.0.n.nupkg`
 or
-- `nuget.exe push -Source github ElGuerre.Items.API.1.0.n.nupkg`
+- `nuget.exe push -Source github ElGuerre.ApiRest.Template.1.0.n.nupkg`
 
 ## Azure DevOps (Artifacts)
 
@@ -102,12 +102,12 @@ or
 - `nuget.exe sources Add -Name templates -Source https://pkgs.dev.azure.com/JuanluElGuerre/elGuerre/_packaging/Templates/nuget/v3/index.json -username unused -password ### TOKEN ###`
 
 ### Publish a new template version
-- nuget.exe push -source templates -ApiKey AzureDevOps ElGuerre.Items.API.1.0.n.nupkg
+- nuget.exe push -source templates -ApiKey AzureDevOps ElGuerre.ApiRest.Template.1.0.n.nupkg
 
 ## Install and uninstall templates
 
 Clear cache: ```dotnet nuget locals http-cache --clear```
-Add new templates ```dotnet new -i ElGuerre.Items.API::*```
+Add new templates ```dotnet new -i ElGuerre.ApiRest.Template::*```
 
 **Note:** List of templeates cached: ```dotnet nuget locals all --list```
 **Note:** Remove cached of templatess Http and Temps: ```dotnet nuget locals http-cache --clear``` y ```dotnet nuget locals temp --clear```

@@ -1,11 +1,11 @@
 {
 	"$schema": "http://json.schemastore.org/template",
 	"author": "Juan Luis Guerrero Minero",
-	"classifications": [ "ElGuerre", "Web", "WebAPI", "Swagger", "API" ],
-	"name": "ElGuerre API Template",	
-	"groupIdentity":"ElGuerre.API.Templates",
-	"identity": "ElGuerre.API.Basic",			// Unique name for this template
-	"shortName": "elguerre-api-basic",	// Short name that can be used on the cli
+	"classifications": [ "ElGuerre", "Web", "WebAPI", "Swagger", "ApiRest" ],
+	"name": "ElGuerre Api Rest",	
+	"groupIdentity":"ElGuerre.ApiRest",
+	"identity": "ElGuerre.ApiRest",	// Unique name for this template
+	"shortName": "elguerre-apirest",	// Short name that can be used on the cli
 	"tags": {
 		"language": "C#",
 		"type": "project"
