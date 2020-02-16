@@ -1,0 +1,191 @@
+trigger:
+- develop
+
+variables:
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+  # Debug | Release
+  buildConfiguration: 'Debug'
+  ASPNETCORE_ENVIRONMENT: 'Development'
+  solutionName: 'ElGuerre.Items'
+  # dev | int | pre
+  environment: 'dev'
+  projectName: 'items-api'
+
+  #SONARQUBE
+  sonarServiceConnection: 'XXX'
+  sonarProjectName: 'ElGuerre.Items.Api'
+  sonarProjectKey: 'XXX'
+  sonarProjectVersion: '1.0.0'
+  
+  # DOCKER 
+  dockerRegistryServiceConnection: 'XXX'
+  dockerRegistryName: 'XXX'
+  dockerRepository: $(environment)-$(projectName)
+  # yyyymmdd.n
+  dockerTag: $(Build.BuildId)  
+
+  # AKS
+  kubernetesServiceConnection: 'XXX'
+  aksNamespace: 'elguerre'
+
+  helmChartName: $(projectName)
+
+stages:
+- stage: Build
+  displayName: Build Stage
+  jobs:
+  - job: BuildJob
+    pool:
+      vImage: $(vmImageName)
+    steps:
+          
+    - task: SonarQubePrepare@4
+      displayName: 'Prepare analysis on SonarQube'
+      inputs:
+        SonarQube: $(sonarServiceConnection)
+        scannerMode: 'MSBuild'
+        projectKey: $(sonarProjectKey)
+        projectName: $(sonarProjectName)
+        projectVersion: $(sonarProjectVersion)
+        extraProperties: |
+          # branch name válido para licencia Developer y supone €€€ !!
+          # sonar.branch.name=$(Build.SourceBranchName)
+          sonar.language=cs
+          sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
+          sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
+          sonar.coverage.exclusions=$(Build.SourcesDirectory)/test/**
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build solution'
+      inputs:
+        projects: '$(solutionName).sln'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet unit tests'
+      inputs:
+        command: test
+        projects: 'test/**/*.Tests.csproj'
+        arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
+      continueOnError: true
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet Integration tests'
+      inputs:
+        command: test
+        projects: 'test/**/*.IntegrationTests.csproj'
+        arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+      continueOnError: true
+    
+    - task: reportgenerator@4
+      displayName: ReportGenerator
+      inputs:
+        reports: '$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml;$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+        targetdir: '$(Build.SourcesDirectory)/TestResults/Reports/'
+        reporttypes: 'HtmlInline_AzurePipelines;Cobertura;SonarQube'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results *.trx'
+      inputs:
+        testResultsFormat: XUnit
+        testResultsFiles: '**/*.trx'
+
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
+        pathToSources: '$(Build.SourcesDirectory)/src'
+        reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
+
+    - task: SonarQubeAnalyze@4
+      displayName: 'Run Code Analysis'
+
+    - publish: $(System.DefaultWorkingDirectory)
+      displayName: 'Upload files'
+      artifact: api
+
+- stage: Deploy
+  displayName: Build and push stage'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: $(environmentName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: api
+
+          - task: Docker@2
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(dockerRepository)
+              command: 'buildAndPush'
+              Dockerfile: $(Pipeline.Workspace)/api/Dockerfile
+              tags: $(dockerTag)
+              arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
+                
+          - task: HelmInstaller@0
+            displayName: 'Install Helm 2.16.1'
+            inputs:            
+              helmVersion: 2.16.1
+              checkLatestHelmVersion: false
+              kubectlVersion: 1.17.0
+              checkLatestKubectl: false
+
+          - task: Bash@3
+            displayName: 'Install Tiller'
+            inputs:
+              targetType: 'inline'
+              script: |
+                installedHelm=$(helm plugin list | grep -c tiller)
+                if [ ${installedHelm}  -eq 0 ]
+                then
+                    helm plugin install https://github.com/rimusz/helm-tiller
+                fi
+          #
+          # Actual AKS ya includye Helm3 (y por tanto Tiller) !
+          #
+
+          # - task: HelmInstaller@1
+          #   inputs:              
+          #     helmVersionToInstall: 3.0.0
+      
+          # - task: Bash@3
+          #   displayName: 'Install Tiller'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: 'helm tiller start-ci'
+
+          - task: HelmDeploy@0
+            displayName: 'helm init'
+            inputs:
+              # namesace -> Predeterminado -> Kube-system (Cross a todo los namespaces)
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              useClusterAdmin: true
+              command: init
+              arguments: '--client-only'
+
+          - task: HelmDeploy@0
+            displayName: 'helm upgrade'
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: $(aksNamespace)
+              useClusterAdmin: true
+              command: upgrade
+              chartType: FilePath
+              chartPath: '$(Pipeline.Workspace)/api/k8s/helm/$(helmChartName)'
+              releaseName: '$(projectName)'
+              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(dockerTag)'
+              valueFile: '$(Pipeline.Workspace)/api/k8s/helm/$(helmChartName)/values.yaml'
+              recreate: true
+              force: true
+              arguments: '--version $(dockerTag)'

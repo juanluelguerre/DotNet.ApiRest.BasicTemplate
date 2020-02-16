@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\ElGuerre.Items.Api\ElGuerre.Items.Api.csproj" />
   </ItemGroup>
 

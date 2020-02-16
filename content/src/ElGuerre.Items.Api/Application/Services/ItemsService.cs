@@ -1,11 +1,9 @@
 ﻿using ElGuerre.Items.Api.Application.Models;
 using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Domain.Interfaces;
-using ElGuerre.Items.Api.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api.Application.Services

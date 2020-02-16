@@ -26,7 +26,7 @@ namespace ElGuerre.Items.Api
         /// Application Name stracted from Namespace using across the app to show information.
         /// </summary>
         public static readonly string AppName = Namespace.Split('.')[Namespace.Split('.').Length - 2];
-        
+
         /// <summary>
         /// Entry Point method
         /// </summary>
@@ -71,11 +71,11 @@ namespace ElGuerre.Items.Api
                 Log.CloseAndFlush();
             }
         }
-        
+
         private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .CaptureStartupErrors(false)
-                .UseStartup<Startup>()                
+                .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((host, config) =>
                 {

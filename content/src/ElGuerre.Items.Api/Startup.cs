@@ -54,7 +54,7 @@ namespace ElGuerre.Items.Api
         }
 
         public IConfiguration Configuration { get; }
-        
+
         /// <summary>
         /// Called by the runtime. Use this method to add services to the container.
         /// </summary>
@@ -73,7 +73,7 @@ namespace ElGuerre.Items.Api
                 .AddCustomAuthentication(_loggerFactory, _environment, _configuration)
                 .AddCustomMVC(_environment);
         }
-        
+
         /// <summary>
         /// Called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
@@ -91,7 +91,7 @@ namespace ElGuerre.Items.Api
                 app.UseHsts();
             }
 
-            if (! env.IsEnvironment("Tests"))
+            if (!env.IsEnvironment("Tests"))
                 app.UseSerilogRequestLogging();
 
             app.UseHealthChecks("/liveness", new HealthCheckOptions
@@ -395,7 +395,7 @@ namespace ElGuerre.Items.Api
                             }
 
                             // TODO: Get and validate additions information for user (using email) and populate Claims to use accross the API.		                            
-                            
+
                             // 1) Implementar a nivel de Application una clase estática similar a la clase ClaimTypes
                             // 1.1) ClaimTypesXXX.IdXXX with value: "http://mda.nsi/IdXXXX"
                             // 2) Create a new Claim using IdXXX and add  idendity: identity.AddClaim(new Claim(ClaimTypesXXX.ID_XXX, "## IdXXX ##"));

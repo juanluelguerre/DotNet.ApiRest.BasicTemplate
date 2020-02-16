@@ -1,12 +1,8 @@
 ﻿using ElGuerre.Items.Api.Application.Models;
 using ElGuerre.Items.Api.Application.Services;
-using ElGuerre.Items.Api.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 

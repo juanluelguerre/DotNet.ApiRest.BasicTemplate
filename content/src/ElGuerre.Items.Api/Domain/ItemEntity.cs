@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ElGuerre.Items.Api.Domain
+﻿namespace ElGuerre.Items.Api.Domain
 {
     public class ItemEntity
     {
