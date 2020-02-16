@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ElGuerre.Items.Api.Tests.Services
 {
-   // [Trait("Category", "Services")]
+    // [Trait("Category", "Services")]
     public class ItemsServiceTest : BaseTest
     {
         private readonly IItemsService itemsService;

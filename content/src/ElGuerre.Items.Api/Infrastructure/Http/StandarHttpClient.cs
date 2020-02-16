@@ -81,7 +81,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
                 requestMessage.Headers.Add("x-requestid", requestId);
             }
 
-            var response = await _client.SendAsync(requestMessage);            
+            var response = await _client.SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 // Raise exception if HttpResponseCode 500 needed for circuit breaker to track fails.
@@ -138,7 +138,7 @@ namespace ElGuerre.Items.Api.Infrastructure.Http
                         }
                 }, "file", fileName);
 
-                requestMessage.Content = form;                
+                requestMessage.Content = form;
                 response = await _client.SendAsync(requestMessage);
 
                 if (response.StatusCode == HttpStatusCode.InternalServerError)

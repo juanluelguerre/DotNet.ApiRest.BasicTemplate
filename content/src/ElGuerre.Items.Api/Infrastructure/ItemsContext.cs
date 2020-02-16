@@ -21,21 +21,21 @@ namespace ElGuerre.Items.Api.Infrastructure
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
             // Shadows Properties to Audit columns: https://docs.microsoft.com/en-us/ef/core/modeling/shadow-properties
             // Set Shadows Properties for all entities (tables) in the DB Model.
-            builder.Model.GetEntityTypes().ToList()
+            modelBuilder.Model.GetEntityTypes().ToList()
                .ForEach(entityType =>
                {
-                   builder.Entity(entityType.ClrType).Property("Id").ForSqlServerUseSequenceHiLo(string.Format("{0}SequenceHiLo", entityType.ClrType.Name));
-                   builder.Entity(entityType.ClrType).Property<DateTime?>("LastUpdated");
-                   builder.Entity(entityType.ClrType).Property<DateTime>("CreationDate");
+                   modelBuilder.Entity(entityType.ClrType).Property("Id").ForSqlServerUseSequenceHiLo(string.Format("{0}SequenceHiLo", entityType.ClrType.Name));
+                   modelBuilder.Entity(entityType.ClrType).Property<DateTime?>("LastUpdated");
+                   modelBuilder.Entity(entityType.ClrType).Property<DateTime>("CreationDate");
                });
 
-            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
         }
 
         public virtual DbSet<ItemEntity> Items { get; set; }
@@ -43,10 +43,10 @@ namespace ElGuerre.Items.Api.Infrastructure
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
-            var modifiedEntries = ChangeTracker.Entries()
+            System.Collections.Generic.IEnumerable<EntityEntry> modifiedEntries = ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
 
-            foreach (var entry in modifiedEntries)
+            foreach (EntityEntry entry in modifiedEntries)
             {
                 // Working with Audit (shadows properties).
                 if (entry.State == EntityState.Modified || entry.State == EntityState.Added)
@@ -74,7 +74,7 @@ namespace ElGuerre.Items.Api.Infrastructure
                .AddJsonFile("appsettings.json")
                .Build();
 
-            var builder = new DbContextOptionsBuilder<ItemsContext>();
+            DbContextOptionsBuilder<ItemsContext> builder = new DbContextOptionsBuilder<ItemsContext>();
 
             builder.UseSqlServer(configuration.GetConnectionString($"{Program.AppName}:{nameof(AppSettings.DBConnectionString)}"));
 

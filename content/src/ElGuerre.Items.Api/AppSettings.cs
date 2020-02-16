@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ElGuerre.Items.Api
 {

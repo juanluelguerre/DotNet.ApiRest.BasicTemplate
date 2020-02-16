@@ -27,15 +27,15 @@ namespace ElGuerre.Items.IntegrationTests.Controllers
         public async Task Get_Items_Ok()
         {
             // Arrange
-            var url = $"{_baseUrl}";
+            string url = $"{_baseUrl}";
 
             // Act
-            var response = await Fixture.Client.GetAsync(url);
+            HttpResponseMessage response = await Fixture.Client.GetAsync(url);
 
             // Assert 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var content = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<List<ItemModel>>(content);
+            string content = await response.Content.ReadAsStringAsync();
+            List<ItemModel> result = JsonConvert.DeserializeObject<List<ItemModel>>(content);
             Assert.NotNull(result);
 
             Assert.True(result.Count > 0, "No items found !");
@@ -46,26 +46,26 @@ namespace ElGuerre.Items.IntegrationTests.Controllers
         public async Task Post_Item_Ok()
         {
             // Arrange
-            var url = $"{_baseUrl}";
+            string url = $"{_baseUrl}";
 
             // Act            
-            var model = new ItemModel
+            ItemModel model = new ItemModel
             {
                 Id = 1,
                 Name = "Peugeot 3008"
             };
 
-            var myContent = JsonConvert.SerializeObject(model);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-            var byteContent = new ByteArrayContent(buffer);
+            string myContent = JsonConvert.SerializeObject(model);
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            ByteArrayContent byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = await Fixture.Client.PostAsync(url, byteContent);
+            HttpResponseMessage response = await Fixture.Client.PostAsync(url, byteContent);
 
             // Assert 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var content = await response.Content.ReadAsStringAsync();
-            var result = int.Parse(content);
+            string content = await response.Content.ReadAsStringAsync();
+            int result = int.Parse(content);
             Assert.Equal(1, result);
         }
     }
