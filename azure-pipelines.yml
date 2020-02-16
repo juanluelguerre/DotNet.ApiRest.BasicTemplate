@@ -14,9 +14,9 @@ variables:
   projectName: 'items-api'
 
   #SONARQUBE
-  sonarServiceConnection: 'XXX'
-  sonarProjectName: 'ElGuerre.Items.Api'
-  sonarProjectKey: 'XXX'
+  sonarServiceConnection: 'Sonar Cloud.io'
+  sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
+  sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0.0'
   
   # DOCKER 
