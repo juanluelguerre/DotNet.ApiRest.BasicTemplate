@@ -18,6 +18,7 @@ variables:
   sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectKey: 'juanluelguerre_DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0'
+  sonarOrganization: 'juanluelguerre-github'
   
   # DOCKER 
   dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
