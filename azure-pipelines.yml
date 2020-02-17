@@ -27,7 +27,7 @@ variables:
   dockerTag: $(Build.BuildId)  
 
   # AKS
-  kubernetesServiceConnection: 'elguerreackServiceConnection'
+  kubernetesServiceConnection: 'elguerreaksServiceConnection'
   aksNamespace: 'elguerre'
 
   helmChartName: $(projectName)
