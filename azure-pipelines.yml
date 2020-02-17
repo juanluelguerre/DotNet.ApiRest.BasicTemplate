@@ -2,7 +2,7 @@ trigger:
 - develop
 
 variables:
-  # Agent VM image name
+   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Debug | Release
@@ -60,13 +60,13 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build solution'
       inputs:
-        projects: '$(solutionName).sln'
+        projects: 'content/$(solutionName).sln'
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet unit tests'
       inputs:
         command: test
-        projects: 'test/**/*.Tests.csproj'
+        projects: 'content/test/**/*.Tests.csproj'
         arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
       continueOnError: true
 
@@ -74,7 +74,7 @@ stages:
       displayName: 'dotnet Integration tests'
       inputs:
         command: test
-        projects: 'test/**/*.IntegrationTests.csproj'
+        projects: 'content/test/**/*.IntegrationTests.csproj'
         arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
       continueOnError: true
     
@@ -96,7 +96,7 @@ stages:
       inputs:
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
-        pathToSources: '$(Build.SourcesDirectory)/src'
+        pathToSources: '$(Build.SourcesDirectory)/content/src'
         reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
 
     - task: SonarQubeAnalyze@4
@@ -182,10 +182,10 @@ stages:
               useClusterAdmin: true
               command: upgrade
               chartType: FilePath
-              chartPath: '$(Pipeline.Workspace)/api/k8s/helm/$(helmChartName)'
+              chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
               releaseName: '$(projectName)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(dockerTag)'
-              valueFile: '$(Pipeline.Workspace)/api/k8s/helm/$(helmChartName)/values.yaml'
+              valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               recreate: true
               force: true
               arguments: '--version $(dockerTag)'
