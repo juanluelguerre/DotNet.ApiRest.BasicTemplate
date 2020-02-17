@@ -16,7 +16,7 @@ variables:
   #SONARQUBE
   sonarServiceConnection: 'Sonar Cloud.io'
   sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
-  sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
+  sonarProjectKey: 'juanluelguerre_DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0.0'
   
   # DOCKER 
