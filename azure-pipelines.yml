@@ -2,7 +2,7 @@ trigger:
 - master
 
 variables:
-  # Agent VM image name
+   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Debug | Release
@@ -14,20 +14,20 @@ variables:
   projectName: 'items-api'
 
   #SONARQUBE
-  sonarServiceConnection: 'XXX'
-  sonarProjectName: 'ElGuerre.Items.Api'
-  sonarProjectKey: 'XXX'
+  sonarServiceConnection: 'Sonar Cloud.io'
+  sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
+  sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0.0'
   
   # DOCKER 
-  dockerRegistryServiceConnection: 'XXX'
-  dockerRegistryName: 'XXX'
+  dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
+  dockerRegistryName: 'elguerreacr'
   dockerRepository: $(environment)-$(projectName)
   # yyyymmdd.n
   dockerTag: $(Build.BuildId)  
 
   # AKS
-  kubernetesServiceConnection: 'XXX'
+  kubernetesServiceConnection: 'elguerreackServiceConnection'
   aksNamespace: 'elguerre'
 
   helmChartName: $(projectName)
