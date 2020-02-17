@@ -17,7 +17,8 @@ variables:
   sonarServiceConnection: 'Sonar Cloud.io'
   sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectKey: 'juanluelguerre_DotNet.ApiRest.BasicTemplate'
-  sonarProjectVersion: '1.0.0'
+  sonarProjectVersion: '1.0'
+  sonarOrganization: 'juanluelguerre-github'
   
   # DOCKER 
   dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
@@ -52,6 +53,7 @@ stages:
         extraProperties: |
           # branch name válido para licencia Developer y supone €€€ !!
           # sonar.branch.name=$(Build.SourceBranchName)
+          sonar.organization=$(sonarOrganization)
           sonar.language=cs
           sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
           sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
