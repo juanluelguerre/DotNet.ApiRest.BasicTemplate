@@ -16,8 +16,8 @@ variables:
   #SONARQUBE
   sonarServiceConnection: 'Sonar Cloud.io'
   sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
-  sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
-  sonarProjectVersion: '1.0.0'
+  sonarProjectKey: 'juanluelguerre_DotNet.ApiRest.BasicTemplate'
+  sonarProjectVersion: '1.0'
   
   # DOCKER 
   dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
@@ -48,7 +48,7 @@ stages:
         scannerMode: 'MSBuild'
         projectKey: $(sonarProjectKey)
         projectName: $(sonarProjectName)
-        projectVersion: $(sonarProjectVersion)
+        projectVersion: $(sonarProjectVersion)        
         extraProperties: |
           # branch name válido para licencia Developer y supone €€€ !!
           # sonar.branch.name=$(Build.SourceBranchName)
