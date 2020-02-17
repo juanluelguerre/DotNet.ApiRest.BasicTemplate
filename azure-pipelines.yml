@@ -1,5 +1,5 @@
 trigger:
-- develop
+- master
 
 variables:
    # Agent VM image name
@@ -16,7 +16,7 @@ variables:
   #SONARQUBE
   sonarServiceConnection: 'Sonar Cloud.io'
   sonarProjectName: 'DotNet.ApiRest.BasicTemplate'
-  sonarProjectKey: 'juanluelguerre_DotNet.ApiRest.BasicTemplate'
+  sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0'
   sonarOrganization: 'juanluelguerre-github'
   
