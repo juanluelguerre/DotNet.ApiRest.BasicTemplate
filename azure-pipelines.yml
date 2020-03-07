@@ -168,6 +168,7 @@ stages:
               kubernetesServiceConnection: $(kubernetesServiceConnection)
               useClusterAdmin: true
               command: init
+              upgradeTiller: false
               arguments: '--client-only'
 
           - task: HelmDeploy@0
