@@ -128,42 +128,42 @@ stages:
               tags: $(dockerTag)
               arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
                 
-          - task: HelmInstaller@0
-            displayName: 'Install Helm 2.16.1'
-            inputs:            
-              helmVersion: 2.16.1
-              checkLatestHelmVersion: false
-              kubectlVersion: 1.17.0
-              checkLatestKubectl: false
+          # - task: HelmInstaller@0
+          #   displayName: 'Install Helm 2.16.1'
+          #   inputs:            
+          #     helmVersion: 2.16.1
+          #     checkLatestHelmVersion: false
+          #     kubectlVersion: 1.17.0
+          #     checkLatestKubectl: false
 
-          - task: Bash@3
-            displayName: 'Install Tiller'
-            inputs:
-              targetType: 'inline'
-              script: |
-                installedHelm=$(helm plugin list | grep -c tiller)
-                if [ ${installedHelm}  -eq 0 ]
-                then
-                    helm plugin install https://github.com/rimusz/helm-tiller
-                fi
-          #
-          # Actual AKS ya includye Helm3 (y por tanto Tiller) !
-          #
-
-          # - task: HelmInstaller@1
-          #   inputs:              
-          #     helmVersionToInstall: 3.0.0
-      
           # - task: Bash@3
           #   displayName: 'Install Tiller'
           #   inputs:
           #     targetType: 'inline'
-          #     script: 'helm tiller start-ci'
+          #     script: |
+          #       installedHelm=$(helm plugin list | grep -c tiller)
+          #       if [ ${installedHelm}  -eq 0 ]
+          #       then
+          #           helm plugin install https://github.com/rimusz/helm-tiller
+          #       fi
+
+          #
+          # Actual AKS ya includye Helm3 (y por tanto Tiller) !
+          #
+          - task: HelmInstaller@1
+            inputs:              
+              helmVersionToInstall: 3.0.0
+      
+          - task: Bash@3
+            displayName: 'Install Tiller'
+            inputs:
+              targetType: 'inline'
+              script: 'helm tiller start-ci'
 
           - task: HelmDeploy@0
             displayName: 'helm init'
             inputs:
-              # namesace -> Predeterminado -> Kube-system (Cross a todo los namespaces)
+              # namesace (by default) -> Kube-system (Cross for all namespaces)
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
               useClusterAdmin: true
