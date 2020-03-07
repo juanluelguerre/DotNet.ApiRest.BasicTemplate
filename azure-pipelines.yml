@@ -168,8 +168,10 @@ stages:
               kubernetesServiceConnection: $(kubernetesServiceConnection)
               useClusterAdmin: true
               command: init
-              arguments: '--client-only'
-
+              upgradeTiller: false
+              waitForExecution: false
+              # arguments: '--client-only'
+              
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
@@ -183,6 +185,6 @@ stages:
               releaseName: '$(projectName)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(dockerTag)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
-              recreate: true
+              # recreate: true
               force: true
               arguments: '--version $(dockerTag)'
