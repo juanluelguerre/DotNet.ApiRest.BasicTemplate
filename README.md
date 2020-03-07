@@ -3,13 +3,9 @@ Is a AspNet Core (API Rest) template to provide Best Practices and use several p
 
 ![Dot Net Api Rest Basic Template](content/assets/DotNetApiRestBasicTemplate.png)
 
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DotNet.ApiRest.BasicTemplate&metric=alert_status)](https://sonarcloud.io/dashboard?id=DotNet.ApiRest.BasicTemplate)
-
-[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=develop)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=develop)
-
-[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=master)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=master)
-
+|Code Quaity|Buid & deploy status for develop|Buid & deploy status for master|
+|--|--|--|
+|[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DotNet.ApiRest.BasicTemplate&metric=alert_status)](https://sonarcloud.io/dashboard?id=DotNet.ApiRest.BasicTemplate)|[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=develop)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=develop)|[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=master)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=master)|
 
 **API project structure**:
 - Application
