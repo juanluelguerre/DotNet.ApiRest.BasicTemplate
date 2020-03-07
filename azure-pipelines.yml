@@ -129,7 +129,7 @@ stages:
               containerRegistry: $(dockerRegistryServiceConnection)
               repository: $(dockerRepository)
               command: 'buildAndPush'
-              Dockerfile: $(Pipeline.Workspace)/api/Dockerfile
+              Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
               tags: $(dockerTag)
               arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
                 
