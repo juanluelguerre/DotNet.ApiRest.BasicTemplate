@@ -169,8 +169,9 @@ stages:
               useClusterAdmin: true
               command: init
               upgradeTiller: false
+              waitForExecution: false
               arguments: '--client-only'
-
+              
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
