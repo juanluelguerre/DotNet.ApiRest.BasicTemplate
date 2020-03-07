@@ -42,18 +42,14 @@ stages:
       vImage: $(vmImageName)
     steps:
           
-    - task: SonarQubePrepare@4
-      displayName: 'Prepare analysis on SonarQube'
+    - task: SonarCloudPrepare@1
       inputs:
-        SonarQube: $(sonarServiceConnection)
+        SonarCloud: 'Sonar Cloud.io Service Connection'
+        organization: 'juanluelguerre-github'
         scannerMode: 'MSBuild'
-        projectKey: $(sonarProjectKey)
-        projectName: $(sonarProjectName)
-        projectVersion: $(sonarProjectVersion)
+        projectKey: 'DotNet.ApiRest.BasicTemplate'
+        projectName: 'DotNet.ApiRest.BasicTemplate'
         extraProperties: |
-          # branch name válido para licencia Developer y supone €€€ !!
-          # sonar.branch.name=$(Build.SourceBranchName)
-          sonar.organization=$(sonarOrganization)
           sonar.language=cs
           sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
           sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
