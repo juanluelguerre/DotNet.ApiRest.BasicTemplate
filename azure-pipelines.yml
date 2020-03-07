@@ -96,9 +96,8 @@ stages:
         summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
         pathToSources: '$(Build.SourcesDirectory)/content/src'
         reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
-
-    - task: SonarQubeAnalyze@4
-      displayName: 'Run Code Analysis'
+        
+    - task: SonarCloudAnalyze@1
 
     - publish: $(System.DefaultWorkingDirectory)
       displayName: 'Upload files'
