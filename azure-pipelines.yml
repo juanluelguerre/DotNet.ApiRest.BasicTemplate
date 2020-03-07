@@ -154,16 +154,16 @@ stages:
             inputs:              
               helmVersionToInstall: 3.0.0
       
-          # - task: Bash@3
-          #   displayName: 'Install Tiller'
-          #   inputs:
-          #     targetType: 'inline'
-          #     script: 'helm tiller start-ci'
+          - task: Bash@3
+            displayName: 'Install Tiller'
+            inputs:
+              targetType: 'inline'
+              script: 'helm tiller start-ci'
 
           - task: HelmDeploy@0
             displayName: 'helm init'
             inputs:
-              # namesace -> Predeterminado -> Kube-system (Cross a todo los namespaces)
+              # namesace (by default) -> Kube-system (Cross for all namespaces)
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
               useClusterAdmin: true
