@@ -169,7 +169,7 @@ stages:
               command: create
               # secretType: 'dockerRegistry'
               # containerRegistryType: 'Azure Container Registry'
-              # arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
+              arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
 
           - task: HelmDeploy@0
             displayName: 'helm init'
