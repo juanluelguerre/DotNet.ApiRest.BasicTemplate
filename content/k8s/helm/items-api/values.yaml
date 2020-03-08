@@ -98,9 +98,9 @@ app:
   name: "elguerre"
   ingress:
     entries:
-      name: elguerre-items-api
+      name: items-api
   svc:
-      name: elguerre-items-api
+      name: items-api
 
 # inf.yaml
 # Estos valores Helm definen la infraestrucutra para cada servicio.
