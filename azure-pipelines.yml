@@ -176,17 +176,20 @@ stages:
               command: apply
               arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
 
-          - task: HelmDeploy@0
-            displayName: 'helm init'
-            inputs:
-              # namesace (by default) -> Kube-system (Cross for all namespaces)
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: $(kubernetesServiceConnection)
-              useClusterAdmin: true
-              command: init
-              upgradeTiller: false
-              waitForExecution: false
-              # arguments: '--client-only'
+          #
+          # heml init dont need in v3.x.x
+          #
+          # - task: HelmDeploy@0
+          #   displayName: 'helm init'
+          #   inputs:
+          #     # namesace (by default) -> Kube-system (Cross for all namespaces)
+          #     connectionType: 'Kubernetes Service Connection'
+          #     kubernetesServiceConnection: $(kubernetesServiceConnection)
+          #     useClusterAdmin: true
+          #     command: init
+          #     upgradeTiller: false
+          #     waitForExecution: false
+          #     # arguments: '--client-only'
               
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
