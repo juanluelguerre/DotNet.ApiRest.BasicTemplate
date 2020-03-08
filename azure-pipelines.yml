@@ -211,7 +211,7 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              releaseName: '$(projectName)'
+              releaseName: '$(environment)-$(projectName)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(dockerTag)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
