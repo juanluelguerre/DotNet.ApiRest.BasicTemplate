@@ -95,12 +95,12 @@ probes:
 # Estos valores Helm definen configuración dde cada servicio
 
 app:                                                  
-  name: "prestaciones"
+  name: "elguerre"
   ingress:
     entries:
-      name: prestaciones-items-api
+      name: elguerre-items-api
   svc:
-      name: prestaciones-items-api
+      name: elguerre-items-api
 
 # inf.yaml
 # Estos valores Helm definen la infraestrucutra para cada servicio.
