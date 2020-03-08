@@ -19,13 +19,13 @@ variables:
   sonarProjectKey: 'DotNet.ApiRest.BasicTemplate'
   sonarProjectVersion: '1.0'
   sonarOrganization: 'juanluelguerre-github'
-  
-  # DOCKER 
+
+  # DOCKER
   dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
   dockerRegistryName: 'elguerreacr'
   dockerRepository: $(environment)-$(projectName)
   # yyyymmdd.n
-  dockerTag: $(Build.BuildId)  
+  dockerTag: $(Build.BuildId)
 
   # AKS
   kubernetesServiceConnection: 'elguerreaksServiceConnection'
@@ -41,7 +41,7 @@ stages:
     pool:
       vImage: $(vmImageName)
     steps:
-          
+
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'Sonar Cloud.io Service Connection'
@@ -75,7 +75,7 @@ stages:
         projects: 'content/test/**/*.IntegrationTests.csproj'
         arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
       continueOnError: true
-    
+
     - task: reportgenerator@4
       displayName: ReportGenerator
       inputs:
@@ -96,7 +96,7 @@ stages:
         summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
         pathToSources: '$(Build.SourcesDirectory)/content/src'
         reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
-        
+
     - task: SonarCloudAnalyze@1
 
     - publish: $(System.DefaultWorkingDirectory)
@@ -127,10 +127,10 @@ stages:
               Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
               tags: $(dockerTag)
               arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
-                
+
           # - task: HelmInstaller@0
           #   displayName: 'Install Helm 2.16.1'
-          #   inputs:            
+          #   inputs:
           #     helmVersion: 2.16.1
           #     checkLatestHelmVersion: false
           #     kubectlVersion: 1.17.0
@@ -151,15 +151,15 @@ stages:
           # Actual AKS ya includye Helm3 (y por tanto Tiller) !
           #
           - task: HelmInstaller@1
-            inputs:              
+            inputs:
               helmVersionToInstall: 3.1.1
-      
+
           - task: Bash@3
             displayName: 'Install Tiller'
             inputs:
               targetType: 'inline'
               script: 'helm tiller start-ci'
-  
+
           # - task: Kubernetes@1
           #   displayName: 'Create namespace'
           #   inputs:
@@ -167,6 +167,16 @@ stages:
           #     kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
           #     command: create
           #     arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
+
+          # - task: Bash@3
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       namespace=$(kubectl get namespaces | grep dev)
+          #       if [ ${namespace}  -eq 0 ]
+          #       then
+          #           kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
+          #       fi
 
           - task: Kubernetes@1
             displayName: 'Allow permissions to kubectl Dashboard'
@@ -190,7 +200,7 @@ stages:
           #     upgradeTiller: false
           #     waitForExecution: false
           #     # arguments: '--client-only'
-              
+
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
