@@ -161,6 +161,7 @@ stages:
               script: 'helm tiller start-ci'
   
           - task: Kubernetes@1
+            displayName: 'Create namespace'
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
