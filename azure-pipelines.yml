@@ -160,13 +160,13 @@ stages:
               targetType: 'inline'
               script: 'helm tiller start-ci'
   
-          - task: Kubernetes@1
-            displayName: 'Create namespace'
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
-              command: create
-              arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
+          # - task: Kubernetes@1
+          #   displayName: 'Create namespace'
+          #   inputs:
+          #     connectionType: 'Kubernetes Service Connection'
+          #     kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
+          #     command: create
+          #     arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
 
           - task: Kubernetes@1
             displayName: 'Allow permissions to kubectl Dashboard'
