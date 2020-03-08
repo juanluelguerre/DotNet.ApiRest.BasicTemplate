@@ -1,5 +1,5 @@
 trigger:
-- master
+- develop
 
 variables:
    # Agent VM image name
@@ -29,7 +29,7 @@ variables:
 
   # AKS
   kubernetesServiceConnection: 'elguerreaksServiceConnection'
-  aksNamespace: 'elguerre'
+  aksNamespace: 'dev'
 
   helmChartName: $(projectName)
 
@@ -159,6 +159,16 @@ stages:
             inputs:
               targetType: 'inline'
               script: 'helm tiller start-ci'
+  
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
+              namespace: $(aksNamespace)
+              command: create
+              # secretType: 'dockerRegistry'
+              # containerRegistryType: 'Azure Container Registry'
+              # arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
 
           - task: HelmDeploy@0
             displayName: 'helm init'
