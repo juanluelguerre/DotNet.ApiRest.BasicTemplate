@@ -28,8 +28,7 @@ variables:
 
   helmChartName: $(projectName)
 
-parameters:
-  # dev | int | pre
+parameters:  
   - name: environment
     displayName: Environment  
     default: dev
@@ -37,14 +36,14 @@ parameters:
       - dev
       - int
       - pre
- 
-  # Debug | Release
+
   - name: buildConfiguration
     displayName: Build Configuration
     default=: Debug
     values:
       - Debug
       - Release
+
   - name: aspnetEnvironment
     displayName: AspNet Environmnt
     default: Development
@@ -83,7 +82,7 @@ stages:
       inputs:
         command: test
         projects: 'content/test/**/*.Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
+        arguments: '--configuration ${{ parameters.buildConfiguration }} /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
       continueOnError: true
 
     - task: DotNetCoreCLI@2
@@ -91,7 +90,7 @@ stages:
       inputs:
         command: test
         projects: 'content/test/**/*.IntegrationTests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+        arguments: '--configuration {{ parameters.buildConfiguration }}  /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
       continueOnError: true
 
     - task: reportgenerator@4
@@ -177,7 +176,7 @@ stages:
               tags: | 
                 dev
                 $(dockerTag)
-              arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
+              arguments: 'ASPNETCORE_ENVIRONMENT={{ parameters.aspnetEnvironment }} '
 
           #
           # heml init dont need in v3.x.x
