@@ -126,7 +126,7 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - job: ConfigureHelmJob
+  - job: buildAndPushDockerJob
     pool: 
       vImage: s(vmImageName)
     steps:
