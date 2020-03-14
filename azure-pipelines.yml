@@ -103,15 +103,15 @@ stages:
       displayName: 'Upload files'
       artifact: api
 
-- stage: Deploy
+- stage: DeploytoDEV
   displayName: Build and push stage'
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - deployment: DeploymentJob
+  - deployment: DeploymentDEVJob
     pool:
       vmImage: $(vmImageName)
-    environment: $(environmentName)
+    environment: DEV
     strategy:
       runOnce:
         deploy:
@@ -127,6 +127,7 @@ stages:
               Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
               tags: $(dockerTag)
               arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
+
 
           # - task: HelmInstaller@0
           #   displayName: 'Install Helm 2.16.1'
@@ -218,3 +219,19 @@ stages:
               # recreate: true
               force: true
               arguments: '--version $(dockerTag)'
+
+- stage: DeploytoINT
+  displayName: Deploy to INT'
+  dependsOn: DeploytoDEV
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentINTJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: INT
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: api
