@@ -5,12 +5,7 @@ variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
-  # Debug | Release
-  buildConfiguration: 'Debug'
-  ASPNETCORE_ENVIRONMENT: 'Development'
   solutionName: 'ElGuerre.Items'
-  # dev | int | pre
-  environment: 'dev'
   projectName: 'items-api'
 
   #SONARQUBE
@@ -23,7 +18,7 @@ variables:
   # DOCKER
   dockerRegistryServiceConnection: 'elguerreacrServiceConnection'
   dockerRegistryName: 'elguerreacr'
-  dockerRepository: $(environment)-$(projectName)
+  dockerRepository: $(projectName)
   # yyyymmdd.n
   dockerTag: $(Build.BuildId)
 
@@ -33,6 +28,14 @@ variables:
 
   helmChartName: $(projectName)
 
+parameters:
+  # dev | int | pre
+  environment: 'dev'
+ 
+  # Debug | Release
+  buildConfiguration: 'Debug'
+  ASPNETCORE_ENVIRONMENT: 'Development'
+
 stages:
 - stage: Build
   displayName: Build Stage
@@ -41,7 +44,6 @@ stages:
     pool:
       vImage: $(vmImageName)
     steps:
-
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'Sonar Cloud.io Service Connection'
@@ -103,9 +105,40 @@ stages:
       displayName: 'Upload files'
       artifact: api
 
+- stage: ConfigureHelm
+  displayName: Configue HelmDeploy
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+    pool: 
+      vImage: s(vmImageName)
+    steps:
+      - download: current
+        artifact: api      
+      #
+      # Actual AKS ya includye Helm3 (y por tanto Tiller) !
+      #
+      - task: HelmInstaller@1
+        inputs:
+          helmVersionToInstall: 3.1.1
+
+      - task: Bash@3
+        displayName: 'Install Tiller'
+        inputs:
+          targetType: 'inline'
+          script: 'helm tiller start-ci'
+
+      - task: Kubernetes@1
+        displayName: 'Allow permissions to kubectl Dashboard'
+        inputs:
+          connectionType: 'Kubernetes Service Connection'
+          kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
+          command: apply
+          arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml      
+
 - stage: DeploytoDEV
   displayName: Build and push stage'
-  dependsOn: Build
+  dependsOn: ConfigureHelm
   condition: succeeded()
   jobs:
   - deployment: DeploymentDEVJob
@@ -125,67 +158,10 @@ stages:
               repository: $(dockerRepository)
               command: 'buildAndPush'
               Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
-              tags: $(dockerTag)
-              arguments: 'ASPNETCORE_ENVIRONMENT=$(ASPNETCORE_ENVIRONMENT)'
-
-
-          # - task: HelmInstaller@0
-          #   displayName: 'Install Helm 2.16.1'
-          #   inputs:
-          #     helmVersion: 2.16.1
-          #     checkLatestHelmVersion: false
-          #     kubectlVersion: 1.17.0
-          #     checkLatestKubectl: false
-
-          # - task: Bash@3
-          #   displayName: 'Install Tiller'
-          #   inputs:
-          #     targetType: 'inline'
-          #     script: |
-          #       installedHelm=$(helm plugin list | grep -c tiller)
-          #       if [ ${installedHelm}  -eq 0 ]
-          #       then
-          #           helm plugin install https://github.com/rimusz/helm-tiller
-          #       fi
-
-          #
-          # Actual AKS ya includye Helm3 (y por tanto Tiller) !
-          #
-          - task: HelmInstaller@1
-            inputs:
-              helmVersionToInstall: 3.1.1
-
-          - task: Bash@3
-            displayName: 'Install Tiller'
-            inputs:
-              targetType: 'inline'
-              script: 'helm tiller start-ci'
-
-          # - task: Kubernetes@1
-          #   displayName: 'Create namespace'
-          #   inputs:
-          #     connectionType: 'Kubernetes Service Connection'
-          #     kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
-          #     command: create
-          #     arguments: -f $(Pipeline.Workspace)/api/content/k8s/namespace-dev.json
-
-          # - task: Bash@3
-          #   inputs:
-          #     targetType: 'inline'
-          #     script: |
-          #       namespace=$(kubectl get namespaces | grep dev)
-          #       if [ ${namespace}  -eq 0 ]
-          #       then
-          #           kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
-          #       fi
-
-          - task: Kubernetes@1
-            displayName: 'Allow permissions to kubectl Dashboard'
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
-              command: apply
-              arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
+              tags: | 
+                dev
+                $(dockerTag)
+              arguments: 'ASPNETCORE_ENVIRONMENT=Development'
 
           #
           # heml init dont need in v3.x.x
@@ -222,7 +198,7 @@ stages:
 
 - stage: DeploytoINT
   displayName: Deploy to INT'
-  dependsOn: DeploytoDEV
+  dependsOn: ConfigureHelm
   condition: succeeded()
   jobs:
   - deployment: DeploymentINTJob
@@ -235,3 +211,34 @@ stages:
           steps:
           - download: current
             artifact: api
+
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'elguerreacrServiceConnection'
+              command: 'login'
+
+          - task: Bash@1
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev $(dockerRegistryName).azurecr.io/$(dockerRepository):int
+
+          - task: HelmDeploy@0
+            displayName: 'helm upgrade'
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: int
+              useClusterAdmin: true
+              command: upgrade
+              chartType: FilePath
+              chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
+              # releaseName: '$(environment)-$(projectName)'
+              releaseName: '$(projectName)2'
+              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=int'
+              valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
+              # recreate: true
+              force: true
+              arguments: '--version $(dockerTag)'
+
+          
