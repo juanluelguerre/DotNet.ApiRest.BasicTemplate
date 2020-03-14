@@ -154,7 +154,7 @@ stages:
           arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml      
 
 - stage: DeploytoDEV
-  displayName: Build and push stage'
+  displayName: Deploy to DEV
   dependsOn: ConfigureHelm
   condition: succeeded()
   jobs:
