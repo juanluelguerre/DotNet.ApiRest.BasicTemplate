@@ -10,7 +10,7 @@
 		"language": "C#",
 		"type": "project"
 	},
-	"sourceName": "ElGuerre.Items",// Will replace the string 'Prestaciones.Items' with the value provided via -n.
+	"sourceName": "ElGuerre.Items",// Will replace the string 'ElGuerre.Items' with the value provided via -n.
 	"preferNameDirectory": true,
 	"symbols": {		
 		"Title": {

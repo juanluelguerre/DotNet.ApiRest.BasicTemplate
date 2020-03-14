@@ -1,11 +1,12 @@
 # Dot Net Api Rest Basic Template
-Is a AspNet Core (API Rest) template to provide Best Practices and use several professional componentes and much more. Also to know how DotNet Templates work.
+Is a AspNet Core (API Rest) template to provide Best Practices and use several professional componentes and much more. Also everything you have to know how about it and how DotNet Templates work.
 
 ![Dot Net Api Rest Basic Template](content/assets/DotNetApiRestBasicTemplate.png)
 
 |Code Quaity|Buid & deploy status for develop|Buid & deploy status for master|
-|--|--|--|
+|:--:|:--:|:--:|
 |[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DotNet.ApiRest.BasicTemplate&metric=alert_status)](https://sonarcloud.io/dashboard?id=DotNet.ApiRest.BasicTemplate)|[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=develop)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=develop)|[![Build Status](https://dev.azure.com/JuanluElGuerre/elGuerre/_apis/build/status/juanluelguerre.DotNet.ApiRest.BasicTemplate?branchName=master)](https://dev.azure.com/JuanluElGuerre/elGuerre/_build/latest?definitionId=24&branchName=master)|
+||||
 
 **API project structure**:
 - Application
@@ -36,15 +37,18 @@ other scripts, like ARM (Azure Resource Manager), could be added here.
 2. API REST using NetCore and best practices:
     - [Swagger](https://docs.microsoft.com/es-es/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio)
     - [Serilog](https://serilog.net/) and also 'ApplicationInsight' + Serilog Extensions.
-    - Entity Framework Core for Commands.    
+    - Entity Framework Core for Commands.
     - [Automapper](https://automapper.org/). Optional to map Model/entities.
     - Entity Framework.
     - HelthChecks.
-    - Authenticaction (via AAD).
+    - Authentication using Azure Active Directory(AAD App Registration).
 3. Docker
 4. Kubernetes and Helm
 5. Azure Pipelines
-6. And much more. 
+6. SonarQube / Sonar Cloud.io
+7. Api Management & Authenticacion AAD [Future Version]
+8. Azure DevSpaces [Future Version]
+9. And much more.
 
 # Blog
 All those new Patterns, Tools and Platforms, will be Blog Post entries in [elGuerre.com](https://elguerre.com)
