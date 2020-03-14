@@ -121,8 +121,8 @@ stages:
       displayName: 'Upload files'
       artifact: api
 
-- stage: ConfigureHelm
-  displayName: Configue HelmDeploy
+- stage: buildAndPushDocker
+  displayName: Build Docker Image
   dependsOn: Build
   condition: succeeded()
   jobs:
@@ -131,7 +131,30 @@ stages:
       vImage: s(vmImageName)
     steps:
       - download: current
-        artifact: api      
+        artifact: api
+
+      - task: Docker@2
+        inputs:
+          containerRegistry: $(dockerRegistryServiceConnection)
+          repository: $(dockerRepository)
+          command: 'buildAndPush'
+          Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
+          tags: | 
+            dev
+            $(dockerTag)
+          arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
+      
+- stage: ConfigureHelm
+  displayName: Configue HelmDeploy
+  dependsOn: bubuildAndPushDockerildDocker
+  condition: succeeded()
+  jobs:
+  - job: ConfigureHelmJob
+    pool: 
+      vImage: s(vmImageName)
+    steps:
+      - download: current
+        artifact: api
       #
       # Actual AKS ya includye Helm3 (y por tanto Tiller) !
       #
@@ -151,7 +174,22 @@ stages:
           connectionType: 'Kubernetes Service Connection'
           kubernetesServiceEndpoint: 'elguerreaksServiceConnection'
           command: apply
-          arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml      
+          arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
+
+      #
+      # heml init dont need in v3.x.x
+      #
+      - task: HelmDeploy@0
+        displayName: 'helm init'
+        inputs:
+          # namesace (by default) -> Kube-system (Cross for all namespaces)
+          connectionType: 'Kubernetes Service Connection'
+          kubernetesServiceConnection: $(kubernetesServiceConnection)
+          useClusterAdmin: true
+          command: init
+          upgradeTiller: false
+          waitForExecution: false
+          # arguments: '--client-only'
 
 - stage: DeploytoDEV
   displayName: Deploy to DEV
@@ -169,31 +207,16 @@ stages:
           - download: current
             artifact: api
 
-          - task: Docker@2
-            inputs:
-              containerRegistry: $(dockerRegistryServiceConnection)
-              repository: $(dockerRepository)
-              command: 'buildAndPush'
-              Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
-              tags: | 
-                dev
-                $(dockerTag)
-              arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
-
-          #
-          # heml init dont need in v3.x.x
-          #
-          - task: HelmDeploy@0
-            displayName: 'helm init'
-            inputs:
-              # namesace (by default) -> Kube-system (Cross for all namespaces)
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: $(kubernetesServiceConnection)
-              useClusterAdmin: true
-              command: init
-              upgradeTiller: false
-              waitForExecution: false
-              # arguments: '--client-only'
+          # - task: Docker@2
+          #   inputs:
+          #     containerRegistry: $(dockerRegistryServiceConnection)
+          #     repository: $(dockerRepository)
+          #     command: 'buildAndPush'
+          #     Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
+          #     tags: | 
+          #       dev
+          #       $(dockerTag)
+          #     arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
