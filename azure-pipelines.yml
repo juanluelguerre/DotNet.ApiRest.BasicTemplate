@@ -263,6 +263,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
+                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev'
                 docker images
                 docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev' '$(dockerRegistryName).azurecr.io/$(dockerRepository):int'
 
@@ -270,7 +271,7 @@ stages:
             displayName: 'Push tag - int'
             inputs:
               targetType: 'inline'
-              script: |
+              script: |                
                 docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):int'
 
           - task: HelmDeploy@0
