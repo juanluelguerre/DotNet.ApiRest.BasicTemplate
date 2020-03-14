@@ -240,6 +240,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
+                docker images
                 docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev' '$(dockerRegistryName).azurecr.io/$(dockerRepository):int'
 
           - task: Bash@3
