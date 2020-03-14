@@ -31,26 +31,26 @@ variables:
 
   helmChartName: $(projectName)
 
-parameters:  
-  - name: environment
-    displayName: Environment  
-    default: dev
-    values:
-      - dev
-      - int
-      - pre
-  - name: buildConfiguration
-    displayName: Build Configuration
-    default: Debug
-    values:
-      - Debug
-      - Release
-  - name: aspnetEnvironment
-    displayName: AspNet Environmnt
-    default: Development
-    values:
-      - Development
-      - Release
+# parameters:  
+#   - name: environment
+#     displayName: Environment  
+#     default: dev
+#     values:
+#       - dev
+#       - int
+#       - pre
+#   - name: buildConfiguration
+#     displayName: Build Configuration
+#     default: Debug
+#     values:
+#       - Debug
+#       - Release
+#   - name: aspnetEnvironment
+#     displayName: AspNet Environmnt
+#     default: Development
+#     values:
+#       - Development
+#       - Release
 
 stages:
 - stage: Build
@@ -91,7 +91,7 @@ stages:
       inputs:
         command: test
         projects: 'content/test/**/*.IntegrationTests.csproj'
-        arguments: '--configuration ${{ parameters.buildConfiguration }}  /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
       continueOnError: true
 
     - task: reportgenerator@4
@@ -178,7 +178,7 @@ stages:
               tags: | 
                 dev
                 $(dockerTag)
-              arguments: 'ASPNETCORE_ENVIRONMENT={{ parameters.aspnetEnvironment }} '
+              arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
 
           #
           # heml init dont need in v3.x.x
