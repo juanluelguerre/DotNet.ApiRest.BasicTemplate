@@ -39,7 +39,7 @@ parameters:
 
   - name: buildConfiguration
     displayName: Build Configuration
-    default=: Debug
+    default: Debug
     values:
       - Debug
       - Release
@@ -125,6 +125,7 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
+  - job: ConfigureHelmJob
     pool: 
       vImage: s(vmImageName)
     steps:
