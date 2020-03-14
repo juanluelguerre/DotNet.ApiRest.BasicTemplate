@@ -230,19 +230,20 @@ stages:
             artifact: api
 
           - task: Docker@2
+            displayName: 'Docker login'
             inputs:
               containerRegistry: 'elguerreacrServiceConnection'
               command: 'login'
 
           - task: Bash@3
-            displayName: Create tag 'int'
+            displayName: 'Create tag - int'
             inputs:
               targetType: 'inline'
               script: |
                 docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev $(dockerRegistryName).azurecr.io/$(dockerRepository):int
 
           - task: Bash@3
-            displayName: Push tag 'int'
+            displayName: 'Push tag - int'
             inputs:
               targetType: 'inline'
               script: |
