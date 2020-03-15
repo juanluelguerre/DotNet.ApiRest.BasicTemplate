@@ -129,6 +129,13 @@ Add new templates ```dotnet new -i ElGuerre.ApiRest.Template::*```
 To authorize AKS to accesos ACR execute the sentence:
 `az aks update -n elguerreaks -g elguerre --attach-acr elguerreacr.azurecr.io`
 
+![Environments](content/assets/AuzurePipeline-Environments.png)
+![Deploy to INT](content/assets/AzurePipelines-Multi-Stages.png)
+![Dedploy to PROD](content/assets/AzurePipeline_DeployPROD.png)
+
+
+
+
 ### Create AKS namespaces 'dev' and 'int'
 ```
 kubectl apply -f ./k8s/namespace-int.json
