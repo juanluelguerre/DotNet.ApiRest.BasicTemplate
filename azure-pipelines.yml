@@ -218,7 +218,7 @@ stages:
 - stage: DeploytoDEV
   displayName: Deploy to DEV
   dependsOn: ConfigureHelm
-  condition: succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: DeploymentDEVJob
     pool:
@@ -253,7 +253,7 @@ stages:
 - stage: DeploytoINT
   displayName: Deploy to INT'
   dependsOn: ConfigureHelm
-  condition: succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop')
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
   - deployment: DeploymentINTJob
     pool:
