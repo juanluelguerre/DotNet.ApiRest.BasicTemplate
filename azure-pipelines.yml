@@ -148,7 +148,7 @@ stages:
           repository: $(dockerRepository)
           command: 'buildAndPush'
           Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
-          tags: | 
+          tags: |
             $(environment)
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
