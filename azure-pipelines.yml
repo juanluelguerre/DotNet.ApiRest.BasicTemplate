@@ -6,24 +6,24 @@ trigger:
 variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
-  branchName: $ {{ variables['Build.SourceBranchName'] }}
+  branchName: ${{ variables['Build.SourceBranchName'] }}
 
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
     prevEnvironment: ''
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
     environment: 'int'
     prevEnvironment: 'dev'
     aspnetEnvironment: 'Production'
-    buildConfiguration: 'Release' 
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
+    buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     environment: 'pro'
     prevEnvironment: 'int'
     aspnetEnvironment: 'Production'
-    buildConfiguration: 'Release'
-  
+    buildConfiguration: 'Release' 
+
   solutionName: 'ElGuerre.Items'
   projectName: 'items-api'
 
@@ -210,8 +210,11 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            if ! kubectl get namespaces | grep $(environment); then
+            if ! (kubectl get namespaces | grep $(environment)); then              
               kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
+              echo 'Aks namespace $(environment) has been created.'
+            else
+              echo 'Aks namespace $(environment) already exists.'
             fi
       
       #
@@ -291,8 +294,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment'
-                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
+                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)'
+                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
                 docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
 
           - task: HelmDeploy@0
