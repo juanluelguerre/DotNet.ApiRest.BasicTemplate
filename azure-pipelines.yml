@@ -10,14 +10,14 @@ variables:
   aspnetEnvironment: 'Production'
   buildConfiguration: 'Release'
 
-  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/develop') }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
-  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/master') }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     environment: 'int'
     prevEnvironment: 'dev'
-  ${{ if startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/') }}:
+  ${{ if startsWith(variables['Build.SourceBranchName'], 'release/') }}:
     environment: 'pro'
     prevEnvironment: 'int'
   
@@ -53,6 +53,17 @@ stages:
     pool:
       vImage: $(vmImageName)
     steps:
+      
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo 'Hello world'
+            echo 'Environment: $(environment)'
+            echo 'Previews Environment: $(prevEnvironment)'
+            echo '$(buildConfiguration)'
+            echo '$(aspnetEnvironment)'
+
       - task: SonarCloudPrepare@1
         inputs:
           SonarCloud: 'Sonar Cloud.io Service Connection'
@@ -155,7 +166,7 @@ stages:
           command: 'buildAndPush'
           Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
           tags: |
-            dev
+            $(environment)
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
       
