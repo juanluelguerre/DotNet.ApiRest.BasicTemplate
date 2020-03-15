@@ -129,13 +129,18 @@ Add new templates ```dotnet new -i ElGuerre.ApiRest.Template::*```
 To authorize AKS to accesos ACR execute the sentence:
 `az aks update -n elguerreaks -g elguerre --attach-acr elguerreacr.azurecr.io`
 
-### Create AKS namespaces 'dev' and 'int'
-```
-kubectl apply -f ./k8s/namespace-int.json
-kubectl apply -f ./k8s/namespace-int.json
-```
+![Deploy using Azure Pipeline Multi-Stage](content/assets/AzurePipelines-Multi-Stages.png)
+![Dedploy to PROD](content/assets/AzurePipeline_DeployPROD.png)
+![Environments](content/assets/AuzurePipeline-Environments.png)
 
-## Navigate to kubectl proxy using
+### Navigate to kubectl proxy using
 `az aks browse --resource-group elguerre --name elguerreaks`
+
+**Create AKS namespaces 'dev', 'int' and 'pro' :**
+```
+kubectl apply -f ./k8s/namespace-dev.json
+kubectl apply -f ./k8s/namespace-int.json
+kubectl apply -f ./k8s/namespace-pro.json
+```
 
 **Note:** Review eazure-pipelines.yml for more detail.
