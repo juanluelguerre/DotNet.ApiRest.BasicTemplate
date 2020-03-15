@@ -200,6 +200,14 @@ stages:
           command: apply
           arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
 
+      - task: Bash@3
+        displayName: 'Create AKS namespace $(environment)'
+        inputs:
+          targetType: 'inline'
+          script: |
+            if kubectl get namespaces | grep $(environment); then
+              kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
+      
       #
       # heml init dont need in v3.x.x
       #
@@ -242,7 +250,7 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              releaseName: '$(projectName)_$(environment)'
+              releaseName: '$(projectName)-$(environment)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
@@ -251,14 +259,14 @@ stages:
 
 # Run deploy for releases or master branch
 - stage: DeployRelease
-  displayName: Deploy to $(environment)'
+  displayName: 'Deploy to $(environment)'
   dependsOn: ConfigureHelm
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
   - deployment: DeploymentReleaseJob
     pool:
       vmImage: $(vmImageName)
-    environment: RELEASE
+    environment: '$(environment)'
     strategy:
       runOnce:
         deploy:
@@ -291,7 +299,7 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              releaseName: '$(projectName)_$(environment)'
+              releaseName: '$(projectName)-$(environment)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
