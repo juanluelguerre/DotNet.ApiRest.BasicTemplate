@@ -17,7 +17,7 @@ variables:
     prevEnvironment: 'dev'
     aspnetEnvironment: 'Production'
     buildConfiguration: 'Release' 
-  ${{ if startsWith(variables['Build.SourceBranchName'], 'release/') }}:
+  ${{ if startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/') }}:
     environment: 'pro'
     prevEnvironment: 'int'
     aspnetEnvironment: 'Production'
