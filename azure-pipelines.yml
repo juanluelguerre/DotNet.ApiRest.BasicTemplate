@@ -142,6 +142,12 @@ stages:
       - download: current
         artifact: api
 
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo 'ENVIRONMENT: $(environment)'
+
       - task: Docker@2
         inputs:
           containerRegistry: $(dockerRegistryServiceConnection)
