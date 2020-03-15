@@ -9,6 +9,7 @@ variables:
 
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
+    prevEnvironment: ''
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
@@ -41,8 +42,6 @@ variables:
 
   # AKS
   kubernetesServiceConnection: 'elguerreaksServiceConnection'
-  aksNamespace: 'dev'
-
   helmChartName: $(projectName)
 
 stages:
@@ -60,7 +59,7 @@ stages:
           targetType: 'inline'
           script: |
             echo 'Hello world'
-            echo 'Environment: $(environment)'
+            echo 'Environment: $(environment)'            
             echo 'Previews Environment: $(prevEnvironment)'
             echo '$(buildConfiguration)'
             echo '$(aspnetEnvironment)'
@@ -161,7 +160,7 @@ stages:
           command: 'buildAndPush'
           Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
           tags: |
-            $(environment)
+            '$(environment)'
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
       
@@ -234,7 +233,7 @@ stages:
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
-              namespace: $(aksNamespace)
+              namespace: $(environment)
               useClusterAdmin: true
               command: upgrade
               chartType: FilePath
