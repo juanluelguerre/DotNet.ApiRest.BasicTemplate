@@ -10,7 +10,7 @@ variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
-  ${{ if not(eq(variables['Build.SourceBranchName'], 'develop')) }}:
+  ${{ if ne(variables['Build.SourceBranchName'], 'develop') }}:
     aspnetEnvironment: 'Production'
     buildConfiguration: 'Release'
 
