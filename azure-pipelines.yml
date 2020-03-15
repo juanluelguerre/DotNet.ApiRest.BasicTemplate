@@ -60,77 +60,77 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build Stage
-  jobs:
-  - ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:  
+  displayName: Build Stage 
+  jobs:   
   - job: BuildJobDevelop
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
     pool:
       vImage: $(vmImageName)
     steps:
-    - task: SonarCloudPrepare@1
-      inputs:
-        SonarCloud: 'Sonar Cloud.io Service Connection'
-        organization: 'juanluelguerre-github'
-        scannerMode: 'MSBuild'
-        projectKey: 'DotNet.ApiRest.BasicTemplate'
-        projectName: 'DotNet.ApiRest.BasicTemplate'
-        extraProperties: |
-          sonar.language=cs
-          sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
-          sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
-          sonar.coverage.exclusions=$(Build.SourcesDirectory)/test/**
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'Sonar Cloud.io Service Connection'
+          organization: 'juanluelguerre-github'
+          scannerMode: 'MSBuild'
+          projectKey: 'DotNet.ApiRest.BasicTemplate'
+          projectName: 'DotNet.ApiRest.BasicTemplate'
+          extraProperties: |
+            sonar.language=cs
+            sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
+            sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
+            sonar.coverage.exclusions=$(Build.SourcesDirectory)/test/**
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build solution'
-      inputs:
-        projects: 'content/$(solutionName).sln'
-        arguments: '--configuration $(buildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet build solution'
+        inputs:
+          projects: 'content/$(solutionName).sln'
+          arguments: '--configuration $(buildConfiguration)'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet unit tests'
-      inputs:
-        command: test
-        projects: 'content/test/**/*.Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
-      continueOnError: true
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet unit tests'
+        inputs:
+          command: test
+          projects: 'content/test/**/*.Tests.csproj'
+          arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
+        continueOnError: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet Integration tests'
-      inputs:
-        command: test
-        projects: 'content/test/**/*.IntegrationTests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
-      continueOnError: true
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet Integration tests'
+        inputs:
+          command: test
+          projects: 'content/test/**/*.IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+        continueOnError: true
 
-    - task: reportgenerator@4
-      displayName: ReportGenerator
-      inputs:
-        reports: '$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml;$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
-        targetdir: '$(Build.SourcesDirectory)/TestResults/Reports/'
-        reporttypes: 'HtmlInline_AzurePipelines;Cobertura;SonarQube'
+      - task: reportgenerator@4
+        displayName: ReportGenerator
+        inputs:
+          reports: '$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml;$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+          targetdir: '$(Build.SourcesDirectory)/TestResults/Reports/'
+          reporttypes: 'HtmlInline_AzurePipelines;Cobertura;SonarQube'
 
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results *.trx'
-      inputs:
-        testResultsFormat: XUnit
-        testResultsFiles: '**/*.trx'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results *.trx'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/*.trx'
 
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage'
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
-        pathToSources: '$(Build.SourcesDirectory)/content/src'
-        reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
+          pathToSources: '$(Build.SourcesDirectory)/content/src'
+          reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
 
-    - task: SonarCloudAnalyze@1
+      - task: SonarCloudAnalyze@1
 
-    - publish: $(System.DefaultWorkingDirectory)
-      displayName: 'Upload files'
-      artifact: api
+      - publish: $(System.DefaultWorkingDirectory)
+        displayName: 'Upload files'
+        artifact: api
 
-  - ${{ if not(eq(variables['Build.SourceBranchName'], 'develop')) }}:
   - job: BuildJobRelease
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/develop')
     pool:
       vImage: $(vmImageName)
     steps:
@@ -214,11 +214,11 @@ stages:
           waitForExecution: false
           # arguments: '--client-only'
 
-- ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+# Run deploy for develop branch
 - stage: DeploytoDEV
   displayName: Deploy to DEV
   dependsOn: ConfigureHelm
-  condition: succeeded()
+  condition: succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master')
   jobs:
   - deployment: DeploymentDEVJob
     pool:
@@ -249,11 +249,11 @@ stages:
               force: true
               arguments: '--version $(dockerTag)'
 
-- ${{ if not(eq(variables['Build.SourceBranchName'], 'develop')) }}:
+# Run deploy for releases or master branch
 - stage: DeploytoINT
   displayName: Deploy to INT'
   dependsOn: ConfigureHelm
-  condition: succeeded()
+  condition: succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop')
   jobs:
   - deployment: DeploymentINTJob
     pool:
