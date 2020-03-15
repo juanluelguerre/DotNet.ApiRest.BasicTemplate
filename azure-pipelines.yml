@@ -145,7 +145,7 @@ stages:
       vImage: $(vmImageName)
     steps:
       - publish: $(System.DefaultWorkingDirectory)
-        displayName: 'Upload files'
+        displayName: 'Upload Artifacts'
         artifact: api
 
 - stage: buildAndPushDocker
