@@ -6,21 +6,24 @@ trigger:
 variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
+  branchName: ${{ variables['Build.SourceBranchName'] }}
 
-  aspnetEnvironment: 'Production'
-  buildConfiguration: 'Release'
-
-  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/develop') }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
+    prevEnvironment: ''
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
-  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/master') }}:
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
     environment: 'int'
     prevEnvironment: 'dev'
-  ${{ if startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/') }}:
+    aspnetEnvironment: 'Production'
+    buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     environment: 'pro'
     prevEnvironment: 'int'
-  
+    aspnetEnvironment: 'Production'
+    buildConfiguration: 'Release' 
+
   solutionName: 'ElGuerre.Items'
   projectName: 'items-api'
 
@@ -40,14 +43,31 @@ variables:
 
   # AKS
   kubernetesServiceConnection: 'elguerreaksServiceConnection'
-  aksNamespace: 'dev'
-
   helmChartName: $(projectName)
 
 stages:
 - stage: Build
   displayName: Build Stage 
   jobs:   
+  - job: PrintInfo  
+    pool:
+      vImage: $(vmImageName)
+    steps:
+      - task: Bash@3
+        displayName: 'Print Variables'
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo 'environment:          $(environment)'
+            echo 'prevEnvironment:      $(prevEnvironment)'
+            echo 'Build Configuration:  $(buildConfiguration)'
+            echo 'aspnetEnvironment:    $(aspnetEnvironment)'
+            echo 'projectName:          $(projectName)'
+            echo 'dockerRepository:     $(dockerRepository)'
+            echo 'dockerTag:            $(dockerTag)'
+            echo 'helmChartName:        $(helmChartName)' 
+            echo 'branchName:           $(branchName)'
+  
   - job: BuildJobDevelop
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
     pool:
@@ -111,10 +131,6 @@ stages:
 
       - task: SonarCloudAnalyze@1
 
-      - publish: $(System.DefaultWorkingDirectory)
-        displayName: 'Upload files'
-        artifact: api
-
   - job: BuildJobRelease
     condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
     pool:
@@ -126,9 +142,13 @@ stages:
           projects: 'content/$(solutionName).sln'
           arguments: '--configuration $(buildConfiguration)'
 
+  - job: UploadArtifacts
+    pool:
+      vImage: $(vmImageName)
+    steps:
       - publish: $(System.DefaultWorkingDirectory)
-        displayName: 'Upload files'
-        artifact: api  
+        displayName: 'Upload Artifacts'
+        artifact: api
 
 - stage: buildAndPushDocker
   displayName: Build Docker Image
@@ -152,7 +172,7 @@ stages:
             $(environment)
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
-      
+
 - stage: ConfigureHelm
   displayName: Configue HelmDeploy
   dependsOn: buildAndPushDocker
@@ -185,6 +205,18 @@ stages:
           command: apply
           arguments: -f $(Pipeline.Workspace)/api/content/k8s/rbac-config.yaml
 
+      - task: Bash@3
+        displayName: 'Create AKS namespace $(environment)'
+        inputs:
+          targetType: 'inline'
+          script: |
+            if ! (kubectl get namespaces | grep $(environment)); then              
+              kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
+              echo 'Aks namespace $(environment) has been created.'
+            else
+              echo 'Aks namespace $(environment) already exists.'
+            fi
+      
       #
       # heml init dont need in v3.x.x
       #
@@ -222,12 +254,12 @@ stages:
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
-              namespace: $(aksNamespace)
+              namespace: $(environment)
               useClusterAdmin: true
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              releaseName: '$(projectName)_$(environment)'
+              releaseName: '$(projectName)-$(environment)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
@@ -236,14 +268,14 @@ stages:
 
 # Run deploy for releases or master branch
 - stage: DeployRelease
-  displayName: Deploy to $(environment)'
+  displayName: 'Deploy to $(environment)'
   dependsOn: ConfigureHelm
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
   - deployment: DeploymentReleaseJob
     pool:
       vmImage: $(vmImageName)
-    environment: $(environment)
+    environment: '$(environment)'
     strategy:
       runOnce:
         deploy:
@@ -262,8 +294,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment'
-                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
+                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)'
+                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
                 docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
 
           - task: HelmDeploy@0
@@ -276,7 +308,7 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              releaseName: '$(projectName)_$(environment)'
+              releaseName: '$(projectName)-$(environment)'
               overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
