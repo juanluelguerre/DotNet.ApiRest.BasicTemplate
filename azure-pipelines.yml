@@ -48,12 +48,10 @@ stages:
 - stage: Build
   displayName: Build Stage 
   jobs:   
-  - job: BuildJobDevelop
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  - job: PrintInfo  
     pool:
       vImage: $(vmImageName)
     steps:
-      
       - task: Bash@3
         displayName: 'Print Variables'
         inputs:
@@ -66,8 +64,13 @@ stages:
             echo 'projectName:          $(projectName)'
             echo 'dockerRepository:     $(dockerRepository)'
             echo 'dockerTag:            $(dockerTag)'
-            echo 'helmChartName:        $(helmChartName)'
-
+            echo 'helmChartName:        $(helmChartName)'      
+  
+  - job: BuildJobDevelop
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    pool:
+      vImage: $(vmImageName)
+    steps:
       - task: SonarCloudPrepare@1
         inputs:
           SonarCloud: 'Sonar Cloud.io Service Connection'
@@ -126,10 +129,6 @@ stages:
 
       - task: SonarCloudAnalyze@1
 
-      - publish: $(System.DefaultWorkingDirectory)
-        displayName: 'Upload files'
-        artifact: api
-
   - job: BuildJobRelease
     condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
     pool:
@@ -141,9 +140,13 @@ stages:
           projects: 'content/$(solutionName).sln'
           arguments: '--configuration $(buildConfiguration)'
 
+  - job: UploadArtifacts
+    pool:
+      vImage: $(vmImageName)
+    steps:
       - publish: $(System.DefaultWorkingDirectory)
         displayName: 'Upload files'
-        artifact: api  
+        artifact: api
 
 - stage: buildAndPushDocker
   displayName: Build Docker Image
