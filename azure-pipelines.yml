@@ -205,7 +205,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            if kubectl get namespaces | grep $(environment); then
+            if ! kubectl get namespaces | grep $(environment); then
               kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
             fi
       
