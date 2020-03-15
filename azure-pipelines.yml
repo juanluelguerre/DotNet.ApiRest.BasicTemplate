@@ -7,9 +7,6 @@ variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
-  aspnetEnvironment: 'Production'
-  buildConfiguration: 'Release'
-
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
     aspnetEnvironment: 'Development'
@@ -17,9 +14,13 @@ variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     environment: 'int'
     prevEnvironment: 'dev'
+    aspnetEnvironment: 'Production'
+    buildConfiguration: 'Release' 
   ${{ if startsWith(variables['Build.SourceBranchName'], 'release/') }}:
     environment: 'pro'
     prevEnvironment: 'int'
+    aspnetEnvironment: 'Production'
+    buildConfiguration: 'Release'
   
   solutionName: 'ElGuerre.Items'
   projectName: 'items-api'
@@ -152,12 +153,6 @@ stages:
     steps:
       - download: current
         artifact: api
-
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            echo 'ENVIRONMENT: $(environment)'
 
       - task: Docker@2
         inputs:
