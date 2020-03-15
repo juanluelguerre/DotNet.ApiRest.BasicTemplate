@@ -1,13 +1,26 @@
 trigger:
 - develop
+- master
+- release/*
 
 variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
-  buildConfiguration: 'Debug'
-  aspnetEnvironment: 'Development'
+  aspnetEnvironment: 'Production'
+  buildConfiguration: 'Release'
 
+  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/develop') }}:
+    environment: 'dev'
+    aspnetEnvironment: 'Development'
+    buildConfiguration: 'Debug'
+  ${{ if eq(variables['Build.SourceBranchName'], 'refs/heads/master') }}:
+    environment: 'int'
+    prevEnvironment: 'dev'
+  ${{ if startsWith(variables['Build.SourceBranchName'], 'refs/heads/release/') }}:
+    environment: 'pro'
+    prevEnvironment: 'int'
+  
   solutionName: 'ElGuerre.Items'
   projectName: 'items-api'
 
@@ -31,95 +44,91 @@ variables:
 
   helmChartName: $(projectName)
 
-# parameters:  
-#   - name: environment
-#     displayName: Environment  
-#     default: dev
-#     values:
-#       - dev
-#       - int
-#       - pre
-#   - name: buildConfiguration
-#     displayName: Build Configuration
-#     default: Debug
-#     values:
-#       - Debug
-#       - Release
-#   - name: aspnetEnvironment
-#     displayName: AspNet Environmnt
-#     default: Development
-#     values:
-#       - Development
-#       - Release
-
 stages:
 - stage: Build
-  displayName: Build Stage
-  jobs:
-  - job: BuildJob
+  displayName: Build Stage 
+  jobs:   
+  - job: BuildJobDevelop
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
     pool:
       vImage: $(vmImageName)
     steps:
-    - task: SonarCloudPrepare@1
-      inputs:
-        SonarCloud: 'Sonar Cloud.io Service Connection'
-        organization: 'juanluelguerre-github'
-        scannerMode: 'MSBuild'
-        projectKey: 'DotNet.ApiRest.BasicTemplate'
-        projectName: 'DotNet.ApiRest.BasicTemplate'
-        extraProperties: |
-          sonar.language=cs
-          sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
-          sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
-          sonar.coverage.exclusions=$(Build.SourcesDirectory)/test/**
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'Sonar Cloud.io Service Connection'
+          organization: 'juanluelguerre-github'
+          scannerMode: 'MSBuild'
+          projectKey: 'DotNet.ApiRest.BasicTemplate'
+          projectName: 'DotNet.ApiRest.BasicTemplate'
+          extraProperties: |
+            sonar.language=cs
+            sonar.coverageReportPaths=$(Build.SourcesDirectory)/TestResults/Reports/SonarQube.xml
+            sonar.exclusions=**/bin/**/*,**/obj/**/*,**/Migrations/**
+            sonar.coverage.exclusions=$(Build.SourcesDirectory)/test/**
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build solution'
-      inputs:
-        projects: 'content/$(solutionName).sln'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet build solution'
+        inputs:
+          projects: 'content/$(solutionName).sln'
+          arguments: '--configuration $(buildConfiguration)'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet unit tests'
-      inputs:
-        command: test
-        projects: 'content/test/**/*.Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
-      continueOnError: true
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet unit tests'
+        inputs:
+          command: test
+          projects: 'content/test/**/*.Tests.csproj'
+          arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml'
+        continueOnError: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet Integration tests'
-      inputs:
-        command: test
-        projects: 'content/test/**/*.IntegrationTests.csproj'
-        arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
-      continueOnError: true
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet Integration tests'
+        inputs:
+          command: test
+          projects: 'content/test/**/*.IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=Cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+        continueOnError: true
 
-    - task: reportgenerator@4
-      displayName: ReportGenerator
-      inputs:
-        reports: '$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml;$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
-        targetdir: '$(Build.SourcesDirectory)/TestResults/Reports/'
-        reporttypes: 'HtmlInline_AzurePipelines;Cobertura;SonarQube'
+      - task: reportgenerator@4
+        displayName: ReportGenerator
+        inputs:
+          reports: '$(Build.SourcesDirectory)/TestResults/Coverage/Tests.Cobertura.xml;$(Build.SourcesDirectory)/TestResults/Coverage/IntegrationTests.Cobertura.xml'
+          targetdir: '$(Build.SourcesDirectory)/TestResults/Reports/'
+          reporttypes: 'HtmlInline_AzurePipelines;Cobertura;SonarQube'
 
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results *.trx'
-      inputs:
-        testResultsFormat: XUnit
-        testResultsFiles: '**/*.trx'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results *.trx'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/*.trx'
 
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage'
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
-        pathToSources: '$(Build.SourcesDirectory)/content/src'
-        reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Reports/Cobertura.xml'
+          pathToSources: '$(Build.SourcesDirectory)/content/src'
+          reportDirectory: '$(Build.SourcesDirectory)/TestResults/Reports/'
 
-    - task: SonarCloudAnalyze@1
+      - task: SonarCloudAnalyze@1
 
-    - publish: $(System.DefaultWorkingDirectory)
-      displayName: 'Upload files'
-      artifact: api
+      - publish: $(System.DefaultWorkingDirectory)
+        displayName: 'Upload files'
+        artifact: api
+
+  - job: BuildJobRelease
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+    pool:
+      vImage: $(vmImageName)
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet build solution'
+        inputs:
+          projects: 'content/$(solutionName).sln'
+          arguments: '--configuration $(buildConfiguration)'
+
+      - publish: $(System.DefaultWorkingDirectory)
+        displayName: 'Upload files'
+        artifact: api  
 
 - stage: buildAndPushDocker
   displayName: Build Docker Image
@@ -139,8 +148,8 @@ stages:
           repository: $(dockerRepository)
           command: 'buildAndPush'
           Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
-          tags: | 
-            dev
+          tags: |
+            $(environment)
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
       
@@ -191,10 +200,11 @@ stages:
           waitForExecution: false
           # arguments: '--client-only'
 
+# Run deploy for develop branch
 - stage: DeploytoDEV
   displayName: Deploy to DEV
   dependsOn: ConfigureHelm
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
   - deployment: DeploymentDEVJob
     pool:
@@ -207,17 +217,6 @@ stages:
           - download: current
             artifact: api
 
-          # - task: Docker@2
-          #   inputs:
-          #     containerRegistry: $(dockerRegistryServiceConnection)
-          #     repository: $(dockerRepository)
-          #     command: 'buildAndPush'
-          #     Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
-          #     tags: | 
-          #       dev
-          #       $(dockerTag)
-          #     arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
-
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
@@ -228,23 +227,23 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              # releaseName: '$(environment)-$(projectName)'
-              releaseName: '$(projectName)2'
-              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(dockerTag)'
+              releaseName: '$(projectName)_$(environment)'
+              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
               force: true
               arguments: '--version $(dockerTag)'
 
-- stage: DeploytoINT
-  displayName: Deploy to INT'
+# Run deploy for releases or master branch
+- stage: DeployRelease
+  displayName: Deploy to $(environment)'
   dependsOn: ConfigureHelm
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
-  - deployment: DeploymentINTJob
+  - deployment: DeploymentReleaseJob
     pool:
       vmImage: $(vmImageName)
-    environment: INT
+    environment: $(environment)
     strategy:
       runOnce:
         deploy:
@@ -259,35 +258,28 @@ stages:
               command: 'login'
 
           - task: Bash@3
-            displayName: 'Create tag - int'
+            displayName: 'New tag - $(environment)'
             inputs:
               targetType: 'inline'
               script: |
-                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev'
-                docker images
-                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):dev' '$(dockerRegistryName).azurecr.io/$(dockerRepository):int'
-
-          - task: Bash@3
-            displayName: 'Push tag - int'
-            inputs:
-              targetType: 'inline'
-              script: |                
-                docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):int'
+                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment'
+                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
+                docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
-              namespace: int
+              namespace: $(environment)
               useClusterAdmin: true
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)'
-              # releaseName: '$(environment)-$(projectName)'
-              releaseName: '$(projectName)2'
-              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=int'
+              releaseName: '$(projectName)_$(environment)'
+              overrideValues: 'image.repository=$(dockerRegistryName).azurecr.io/$(dockerRepository),image.tag=$(environment)'
               valueFile: '$(Pipeline.Workspace)/api/content/k8s/helm/$(helmChartName)/values.yaml'
               # recreate: true
               force: true
               arguments: '--version $(dockerTag)'
+
