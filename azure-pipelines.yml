@@ -49,7 +49,7 @@ stages:
   displayName: Build Stage 
   jobs:   
   - job: BuildJobDevelop
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop_xxx')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
     pool:
       vImage: $(vmImageName)
     steps:
