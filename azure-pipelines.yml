@@ -49,20 +49,24 @@ stages:
   displayName: Build Stage 
   jobs:   
   - job: BuildJobDevelop
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop_xxx')
     pool:
       vImage: $(vmImageName)
     steps:
       
       - task: Bash@3
+        displayName: 'Print Variables'
         inputs:
           targetType: 'inline'
           script: |
-            echo 'Hello world'
-            echo 'Environment: $(environment)'            
-            echo 'Previews Environment: $(prevEnvironment)'
-            echo '$(buildConfiguration)'
-            echo '$(aspnetEnvironment)'
+            echo 'environment:          $(environment)'
+            echo 'prevEnvironment:      $(prevEnvironment)'
+            echo 'Build Configuration:  $(buildConfiguration)'
+            echo 'aspnetEnvironment:    $(aspnetEnvironment)'
+            echo 'projectName:          $(projectName)'
+            echo 'dockerRepository:     $(dockerRepository)'
+            echo 'dockerTag:            $(dockerTag)'
+            echo 'helmChartName:        $(helmChartName)'
 
       - task: SonarCloudPrepare@1
         inputs:
@@ -160,10 +164,10 @@ stages:
           command: 'buildAndPush'
           Dockerfile: $(Pipeline.Workspace)/api/content/Dockerfile
           tags: |
-            '$(environment)'
+            $(environment)
             $(dockerTag)
           arguments: 'ASPNETCORE_ENVIRONMENT=$(aspnetEnvironment)'
-      
+
 - stage: ConfigureHelm
   displayName: Configue HelmDeploy
   dependsOn: buildAndPushDocker
