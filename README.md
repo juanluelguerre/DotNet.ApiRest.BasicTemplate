@@ -56,16 +56,19 @@ All those new Patterns, Tools and Platforms, will be Blog Post entries in [elGue
 
 # Runnng the App
 1. Using Kestrel from Visual Studio:
-`
-xxx
-`
+```
+cd ./content/src/ElGuerre.Items.Api
+dotnet run ...
+```
 2. Using Docker from Visual Studio or Docker Command Line:
-`
-xxx
-`
+```
+cd ./content
+docker build -t items-api .
+docker run items-api
+```
 3. Run Entity Framework Migration: 
 ```
-cd ElGuerre.Items.Api
+cd ./content/src/ElGuerre.Items.Api
 dotnet ef migrations add Init --startup-project ..\src\ElGuerre.Items.Api.csproj
 dotnet ef database update --startup-project ..\src\ElGuerre.Items.Api.csproj
 ``` 
@@ -90,7 +93,7 @@ dotnet ef database update --startup-project ..\src\ElGuerre.Items.Api.csproj
 
 ![How to generate github token](content/assets/GenerateToken-Github-Packages.png)
 
-### PUblish a new template version
+### Publish a new template version
 ```
 dotnet nuget push "ElGuerre.ApiRest.Template.1.0.0.nupkg" --source "github"
 ```
@@ -119,3 +122,20 @@ Add new templates ```dotnet new -i ElGuerre.ApiRest.Template::*```
 
 **Note:** List of templeates cached: ```dotnet nuget locals all --list```
 **Note:** Remove cached of templatess Http and Temps: ```dotnet nuget locals http-cache --clear``` y ```dotnet nuget locals temp --clear```
+
+## Azure DevOps Multi-stages
+
+### Attach AKS (Azure Kubernetes Services) to ACR (Azure Container Registry)
+To authorize AKS to accesos ACR execute the sentence:
+`az aks update -n elguerreaks -g elguerre --attach-acr elguerreacr.azurecr.io`
+
+### Create AKS namespaces 'dev' and 'int'
+```
+kubectl apply -f ./k8s/namespace-int.json
+kubectl apply -f ./k8s/namespace-int.json
+```
+
+## Navigate to kubectl proxy using
+`az aks browse --resource-group elguerre --name elguerreaks`
+
+**Note:** Review eazure-pipelines.yml for more detail.
