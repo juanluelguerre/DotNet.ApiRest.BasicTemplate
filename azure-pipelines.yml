@@ -13,17 +13,17 @@ variables:
     prevEnvironment: ''
     aspnetEnvironment: 'Development'
     buildConfiguration: 'Debug'
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
     environment: 'int'
     prevEnvironment: 'dev'
     aspnetEnvironment: 'Production'
-    buildConfiguration: 'Release' 
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
+    buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     environment: 'pro'
     prevEnvironment: 'int'
     aspnetEnvironment: 'Production'
-    buildConfiguration: 'Release'
-  
+    buildConfiguration: 'Release' 
+
   solutionName: 'ElGuerre.Items'
   projectName: 'items-api'
 
