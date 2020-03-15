@@ -207,6 +207,7 @@ stages:
           script: |
             if kubectl get namespaces | grep $(environment); then
               kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
+            fi
       
       #
       # heml init dont need in v3.x.x
