@@ -210,8 +210,11 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            if ! kubectl get namespaces | grep $(environment); then
+            if ! (kubectl get namespaces | grep $(environment)); then              
               kubectl apply -f $(Pipeline.Workspace)/api/content/k8s/namespace-$(environment).json
+              echo 'Aks namespace $(environment) has been created.'
+            else
+              echo 'Aks namespace $(environment) already exists.'
             fi
       
       #
