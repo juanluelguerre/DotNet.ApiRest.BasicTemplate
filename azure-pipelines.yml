@@ -6,7 +6,7 @@ trigger:
 variables:
    # Agent VM image name
   vmImageName: 'ubuntu-latest'
-  branchName: $ {{ variables['Build.SourceBranchName'] }}
+  branchName: ${{ variables['Build.SourceBranchName'] }}
 
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
     environment: 'dev'
@@ -294,8 +294,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment'
-                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):prevEnvironment' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
+                docker pull '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)'
+                docker tag '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(prevEnvironment)' '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
                 docker push '$(dockerRegistryName).azurecr.io/$(dockerRepository):$(environment)'
 
           - task: HelmDeploy@0
