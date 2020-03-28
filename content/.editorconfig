@@ -2,3 +2,6 @@
 
 # CS1591: Missing XML comment for publicly visible type or member
 dotnet_diagnostic.CS1591.severity = none
+
+# S4457: Parameter validation in "async"/"await" methods should be wrapped
+dotnet_diagnostic.S4457.severity = suggestion

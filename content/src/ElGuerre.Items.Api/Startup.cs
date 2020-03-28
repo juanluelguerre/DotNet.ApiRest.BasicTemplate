@@ -1,5 +1,5 @@
 ﻿using ElGuerre.Items.Api.Application.Services;
-using ElGuerre.Items.Api.Domain.Interfaces;
+using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Infrastructure;
 using ElGuerre.Items.Api.Infrastructure.Filters;
 using ElGuerre.Items.Api.Infrastructure.Http;
@@ -238,7 +238,6 @@ namespace ElGuerre.Items.Api
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
                 options.EnableAnnotations();
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {

@@ -52,6 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Domain\Interfaces\" />
 		<Folder Include="Infrastructure\Middlewares\" />
 		<Folder Include="Infrastructure\Providers\" />
 	</ItemGroup>

@@ -64,7 +64,7 @@ namespace ElGuerre.Items.Api.Infrastructure
         }
     }
 
-    public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<ItemsContext>
+    public class ItemsContextDesignFactory : IDesignTimeDbContextFactory<ItemsContext>
     {
         public ItemsContext CreateDbContext(string[] args)
         {

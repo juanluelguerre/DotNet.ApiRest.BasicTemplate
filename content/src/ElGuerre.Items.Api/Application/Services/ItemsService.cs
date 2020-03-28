@@ -1,6 +1,5 @@
 ﻿using ElGuerre.Items.Api.Application.Models;
 using ElGuerre.Items.Api.Domain;
-using ElGuerre.Items.Api.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,6 +18,11 @@ namespace ElGuerre.Items.Api.Application.Services
             _repository = repository;
         }
 
+        /// <summary>
+        /// Get the item for teh id passed by param
+        /// </summary>
+        /// <param name="id">The id to look for</param>
+        /// <returns>Item found</returns>
         public ItemModel GetItem(int id)
         {
             if (id <= 0)
@@ -36,6 +40,10 @@ namespace ElGuerre.Items.Api.Application.Services
             };
         }
 
+        /// <summary>
+        /// Get all items for <see cref="ItemModel"/> type.
+        /// </summary>
+        /// <returns>List of all intems</returns>
         public List<ItemModel> GetItems()
         {
             var entities = _repository.GetAll();
@@ -50,22 +58,36 @@ namespace ElGuerre.Items.Api.Application.Services
             return model;
         }
 
-        public async Task<int> UpdateAsync(ItemModel model)
+        public Task<int> UpdateAsync(ItemModel model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model), "Input model cannot be null.");
 
             if (model.Id <= 0)
-                throw new ArgumentException("Item Id cannot be null or empty.", nameof(model.Id));
+                throw new InvalidOperationException($"{nameof(ItemModel.Id)} cannot be null or empty.");
 
+            return UpdateInternalAsync(model);
+        }
+
+        /// <summary>
+        /// Internal metod to update a model. 
+        /// Avoid sonarqube QA rule: 'Parameter validation in "async"/"await" methods should be wrapped'
+        /// </summary>
+        /// <param name="model">Model to be updated</param>
+        /// <returns>Operation result. 1 or 0 to indicate if update really has change somethig.</returns>        
+        private async Task<int> UpdateInternalAsync(ItemModel model)
+        {
             var entity = new ItemEntity
             {
                 Id = model.Id,
                 Name = model.Name,
                 Description = $"The id '{model.Id}' is linked to item '{model.Name}'."
-            };
+            };            
 
             var result = await _repository.UpdateAsync(entity);
+
+            _logger.LogInformation($"Update completed with id: '{entity.Id}' has been updated with name: {entity.Name}.");
+
             return result;
         }
     }

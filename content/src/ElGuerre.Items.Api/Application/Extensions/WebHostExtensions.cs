@@ -6,10 +6,13 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using System;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ElGuerre.Items.Api.Application.Extensions
 {
-    public static class WebHostExtensions
+    [SuppressMessage("NDepend", "ND2012:AvoidHavingDifferentTypesWithSameName",
+        Justification = "TODO")]
+    public static class ItemsWebHostExtensions
     {
         private static IConfiguration Configuration { set; get; }
 

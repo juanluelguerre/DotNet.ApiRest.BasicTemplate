@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using ElGuerre.Items.Api.Application.Services;
-using ElGuerre.Items.Api.Domain.Interfaces;
+using ElGuerre.Items.Api.Domain;
 using ElGuerre.Items.Api.Infrastructure;
 using ElGuerre.Items.Api.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
