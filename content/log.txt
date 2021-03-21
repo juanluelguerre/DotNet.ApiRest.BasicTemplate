@@ -1,0 +1,136 @@
+2021-03-20 20:54:44.574 +01:00 [INF] MSBuild registered from C:\Program Files\dotnet\sdk\5.0.201\
+2021-03-20 20:54:44.995 +01:00 [INF] Registered 1 extensions:
+	Default extension
+2021-03-20 20:55:08.593 +01:00 [INF] Initializing upgrade step Select an entrypoint
+2021-03-20 20:55:08.938 +01:00 [INF] Applying upgrade step Select an entrypoint
+2021-03-20 21:06:51.404 +01:00 [INF] Upgrade step Select an entrypoint applied successfully
+2021-03-20 21:06:59.166 +01:00 [INF] Initializing upgrade step Finalize Solution
+2021-03-20 21:08:17.720 +01:00 [INF] Saving upgrade progress file at C:\dev\DotNet.ApiRest.BasicTemplate\content\.upgrade-assistant
+2021-03-20 21:08:18.773 +01:00 [ERR] Unexpected error: Could not find .NETCoreApp,Version=v5.0 in C:\dev\DotNet.ApiRest.BasicTemplate\content\test\ElGuerre.Items.Api.Tests\obj\project.assets.json for C:\dev\DotNet.ApiRest.BasicTemplate\content\test\ElGuerre.Items.Api.Tests\ElGuerre.Items.Api.Tests.csproj
+2021-03-20 21:08:26.388 +01:00 [INF] MSBuild registered from C:\Program Files\dotnet\sdk\5.0.201\
+2021-03-20 21:08:26.912 +01:00 [INF] Registered 1 extensions:
+	Default extension
+2021-03-20 21:08:43.810 +01:00 [INF] Loading upgrade progress file at C:\dev\DotNet.ApiRest.BasicTemplate\content\.upgrade-assistant
+2021-03-20 21:08:50.016 +01:00 [INF] Initializing upgrade step Select project to upgrade
+2021-03-20 21:09:02.815 +01:00 [INF] Applying upgrade step Select project to upgrade
+2021-03-20 21:09:33.034 +01:00 [INF] Upgrade step Select project to upgrade applied successfully
+2021-03-20 21:09:56.808 +01:00 [INF] Initializing upgrade step Back up project
+2021-03-20 21:11:44.669 +01:00 [INF] Skipping upgrade step Back up project
+2021-03-20 21:11:44.673 +01:00 [INF] Upgrade step Back up project skipped
+2021-03-20 21:11:50.722 +01:00 [INF] Initializing upgrade step Convert project file to SDK style
+2021-03-20 21:11:50.729 +01:00 [FTL] Try-Convert not found. This tool depends on the Try-Convert CLI tool. Please ensure that Try-Convert is installed and that the correct location for the tool is specified (in configuration, for example). https://github.com/dotnet/try-convert
+2021-03-20 21:14:30.425 +01:00 [INF] Skipping upgrade step Convert project file to SDK style
+2021-03-20 21:14:30.428 +01:00 [INF] Upgrade step Convert project file to SDK style skipped
+2021-03-20 21:14:35.313 +01:00 [INF] Initializing upgrade step Update TFM
+2021-03-20 21:14:44.799 +01:00 [INF] Skipping upgrade step Update TFM
+2021-03-20 21:14:44.803 +01:00 [INF] Upgrade step Update TFM skipped
+2021-03-20 21:14:49.663 +01:00 [INF] Initializing upgrade step Update NuGet packages
+2021-03-20 21:14:52.805 +01:00 [INF] Marking package AutoMapper for removal because it appears to be a transitive dependency
+2021-03-20 21:14:52.940 +01:00 [INF] Marking package Microsoft.AspNetCore.Razor.Design for removal because it appears to be a transitive dependency
+2021-03-20 21:14:52.991 +01:00 [INF] Marking package Serilog.Settings.Configuration for removal because it appears to be a transitive dependency
+2021-03-20 21:14:53.065 +01:00 [INF] Marking package Serilog.Sinks.Console for removal because it appears to be a transitive dependency
+2021-03-20 21:14:53.137 +01:00 [INF] Marking package Swashbuckle.AspNetCore.Swagger for removal because it appears to be a transitive dependency
+2021-03-20 21:14:55.322 +01:00 [WRN] NuGet package Microsoft.AspNetCore.App, Version=0.0.0 not found
+2021-03-20 21:14:56.767 +01:00 [INF] Marking package Microsoft.AspNetCore.App, Version=0.0.0 for removal because it doesn't support the target framework but a newer version (2.2.8) does
+2021-03-20 21:14:56.776 +01:00 [WRN] Package Microsoft.AspNetCore.App has been upgraded across major versions (0 -> 2) which may introduce breaking changes
+2021-03-20 21:14:58.323 +01:00 [WRN] No version of Microsoft.VisualStudio.Azure.Containers.Tools.Targets found that supports net5.0; leaving unchanged
+2021-03-20 21:14:59.158 +01:00 [INF] Reference to .NET Upgrade Assistant analyzer package (Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, version 0.2.212405) needs added
+2021-03-20 21:14:59.163 +01:00 [INF] Packages to be removed:
+AutoMapper, Version=9.0.0
+Microsoft.AspNetCore.Razor.Design, Version=2.2.0
+Serilog.Settings.Configuration, Version=3.1.0
+Serilog.Sinks.Console, Version=3.1.1
+Swashbuckle.AspNetCore.Swagger, Version=5.0.0
+Microsoft.AspNetCore.App, Version=0.0.0
+2021-03-20 21:14:59.165 +01:00 [INF] Packages to be addded:
+Microsoft.AspNetCore.App, Version=2.2.8
+Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.2.212405
+2021-03-20 21:17:07.498 +01:00 [INF] MSBuild registered from C:\Program Files\dotnet\sdk\5.0.201\
+2021-03-20 21:17:07.548 +01:00 [INF] Registered 1 extensions:
+	Default extension
+2021-03-20 21:17:12.096 +01:00 [INF] Loading upgrade progress file at C:\dev\DotNet.ApiRest.BasicTemplate\content\.upgrade-assistant
+2021-03-20 21:17:18.174 +01:00 [INF] Initializing upgrade step Back up project
+2021-03-20 21:17:22.836 +01:00 [INF] Skipping upgrade step Back up project
+2021-03-20 21:17:22.841 +01:00 [INF] Upgrade step Back up project skipped
+2021-03-20 21:22:23.702 +01:00 [INF] Initializing upgrade step Convert project file to SDK style
+2021-03-20 21:22:23.706 +01:00 [INF] Initializing upgrade step Update TFM
+2021-03-20 21:22:50.543 +01:00 [INF] Applying upgrade step Update TFM
+2021-03-20 21:22:58.876 +01:00 [INF] Upgrade step Update TFM applied successfully
+2021-03-20 21:23:09.174 +01:00 [INF] Initializing upgrade step Update NuGet packages
+2021-03-20 21:23:17.347 +01:00 [WRN] No version of Microsoft.VisualStudio.Azure.Containers.Tools.Targets found that supports net5.0; leaving unchanged
+2021-03-20 21:23:17.365 +01:00 [INF] No package updates needed
+2021-03-20 21:23:17.368 +01:00 [INF] Initializing upgrade step Add template files
+2021-03-20 21:23:17.392 +01:00 [INF] 0 expected template items needed
+2021-03-20 21:23:17.394 +01:00 [INF] Initializing upgrade step Update C# source
+2021-03-20 21:23:22.415 +01:00 [INF] Initializing upgrade step Move to next project
+2021-03-20 21:30:39.219 +01:00 [INF] MSBuild registered from C:\Program Files\dotnet\sdk\5.0.201\
+2021-03-20 21:30:39.262 +01:00 [INF] Registered 1 extensions:
+	Default extension
+2021-03-20 21:30:43.295 +01:00 [INF] Initializing upgrade step Select an entrypoint
+2021-03-20 21:31:04.828 +01:00 [INF] Applying upgrade step Select an entrypoint
+2021-03-20 21:31:35.307 +01:00 [INF] Upgrade step Select an entrypoint applied successfully
+2021-03-20 21:31:42.458 +01:00 [INF] Initializing upgrade step Select project to upgrade
+2021-03-20 21:31:50.667 +01:00 [INF] Applying upgrade step Select project to upgrade
+2021-03-20 21:31:53.537 +01:00 [INF] Upgrade step Select project to upgrade applied successfully
+2021-03-20 21:32:05.387 +01:00 [INF] Initializing upgrade step Back up project
+2021-03-20 21:32:37.812 +01:00 [INF] Applying upgrade step Back up project
+2021-03-20 21:32:43.107 +01:00 [INF] Backing up C:\dev\DotNet.ApiRest.BasicTemplate\content\src\ElGuerre.Items.Api to C:\dev\DotNet.ApiRest.BasicTemplate\content\src\ElGuerre.Items.Api.backup
+2021-03-20 21:32:55.021 +01:00 [INF] Project backed up to C:\dev\DotNet.ApiRest.BasicTemplate\content\src\ElGuerre.Items.Api.backup
+2021-03-20 21:32:55.024 +01:00 [INF] Upgrade step Back up project applied successfully
+2021-03-20 21:32:58.701 +01:00 [INF] Initializing upgrade step Convert project file to SDK style
+2021-03-20 21:32:58.707 +01:00 [INF] Initializing upgrade step Update TFM
+2021-03-20 21:33:06.859 +01:00 [INF] Applying upgrade step Update TFM
+2021-03-20 21:33:11.900 +01:00 [INF] Upgrade step Update TFM applied successfully
+2021-03-20 22:04:09.222 +01:00 [INF] Initializing upgrade step Update NuGet packages
+2021-03-20 22:04:11.992 +01:00 [INF] Marking package AutoMapper for removal because it appears to be a transitive dependency
+2021-03-20 22:04:12.090 +01:00 [INF] Marking package Microsoft.AspNetCore.Razor.Design for removal because it appears to be a transitive dependency
+2021-03-20 22:04:12.129 +01:00 [INF] Marking package Serilog.Settings.Configuration for removal because it appears to be a transitive dependency
+2021-03-20 22:04:12.180 +01:00 [INF] Marking package Serilog.Sinks.Console for removal because it appears to be a transitive dependency
+2021-03-20 22:04:12.236 +01:00 [INF] Marking package Swashbuckle.AspNetCore.Swagger for removal because it appears to be a transitive dependency
+2021-03-20 22:04:13.327 +01:00 [WRN] NuGet package Microsoft.AspNetCore.App, Version=0.0.0 not found
+2021-03-20 22:04:14.323 +01:00 [INF] Marking package Microsoft.AspNetCore.App, Version=0.0.0 for removal because it doesn't support the target framework but a newer version (2.2.8) does
+2021-03-20 22:04:14.329 +01:00 [WRN] Package Microsoft.AspNetCore.App has been upgraded across major versions (0 -> 2) which may introduce breaking changes
+2021-03-20 22:04:15.731 +01:00 [WRN] No version of Microsoft.VisualStudio.Azure.Containers.Tools.Targets found that supports net5.0; leaving unchanged
+2021-03-20 22:04:16.386 +01:00 [INF] Reference to .NET Upgrade Assistant analyzer package (Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, version 0.2.212405) needs added
+2021-03-20 22:04:16.394 +01:00 [INF] Packages to be removed:
+AutoMapper, Version=9.0.0
+Microsoft.AspNetCore.Razor.Design, Version=2.2.0
+Serilog.Settings.Configuration, Version=3.1.0
+Serilog.Sinks.Console, Version=3.1.1
+Swashbuckle.AspNetCore.Swagger, Version=5.0.0
+Microsoft.AspNetCore.App, Version=0.0.0
+2021-03-20 22:04:16.397 +01:00 [INF] Packages to be addded:
+Microsoft.AspNetCore.App, Version=2.2.8
+Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.2.212405
+2021-03-20 22:04:38.924 +01:00 [INF] Applying upgrade step Update NuGet packages
+2021-03-20 22:04:38.931 +01:00 [INF] Removing outdated package reference: AutoMapper, Version=9.0.0
+2021-03-20 22:04:38.934 +01:00 [INF] Removing outdated package reference: Microsoft.AspNetCore.App, Version=0.0.0
+2021-03-20 22:04:38.939 +01:00 [INF] Removing outdated package reference: Microsoft.AspNetCore.Razor.Design, Version=2.2.0
+2021-03-20 22:04:38.943 +01:00 [INF] Removing outdated package reference: Serilog.Settings.Configuration, Version=3.1.0
+2021-03-20 22:04:38.947 +01:00 [INF] Removing outdated package reference: Serilog.Sinks.Console, Version=3.1.1
+2021-03-20 22:04:38.949 +01:00 [INF] Removing outdated package reference: Swashbuckle.AspNetCore.Swagger, Version=5.0.0
+2021-03-20 22:04:38.952 +01:00 [INF] Adding package reference: Microsoft.AspNetCore.App, Version=2.2.8
+2021-03-20 22:04:38.954 +01:00 [INF] Adding package reference: Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.2.212405
+2021-03-20 22:04:44.015 +01:00 [WRN] No version of Microsoft.VisualStudio.Azure.Containers.Tools.Targets found that supports net5.0; leaving unchanged
+2021-03-20 22:04:44.025 +01:00 [INF] Upgrade step Update NuGet packages applied successfully
+2021-03-20 22:04:59.274 +01:00 [INF] Initializing upgrade step Add template files
+2021-03-20 22:04:59.292 +01:00 [INF] 0 expected template items needed
+2021-03-20 22:04:59.297 +01:00 [INF] Initializing upgrade step Update C# source
+2021-03-20 22:05:01.312 +01:00 [INF] Initializing upgrade step Move to next project
+2021-03-20 22:05:21.902 +01:00 [INF] Applying upgrade step Move to next project
+2021-03-20 22:05:21.907 +01:00 [INF] Upgrade step Move to next project applied successfully
+2021-03-20 22:05:25.125 +01:00 [INF] Initializing upgrade step Select project to upgrade
+2021-03-20 22:05:31.208 +01:00 [INF] Applying upgrade step Select project to upgrade
+2021-03-20 22:05:43.945 +01:00 [ERR] Unknown selection: '5'
+2021-03-20 22:05:52.646 +01:00 [ERR] Unknown selection: 'ElGuerre.Items.Api'
+2021-03-20 22:05:56.852 +01:00 [ERR] Unknown selection: '1'
+2021-03-20 22:05:58.063 +01:00 [ERR] Unknown selection: '1'
+2021-03-20 22:05:59.208 +01:00 [ERR] Unknown selection: '0'
+2021-03-20 22:05:59.710 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:00.175 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:00.329 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:00.482 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:09.962 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:10.583 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:11.146 +01:00 [ERR] Unknown selection: ''
+2021-03-20 22:06:15.934 +01:00 [INF] Saving upgrade progress file at C:\dev\DotNet.ApiRest.BasicTemplate\content\.upgrade-assistant

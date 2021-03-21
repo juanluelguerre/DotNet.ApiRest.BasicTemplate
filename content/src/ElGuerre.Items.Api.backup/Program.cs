@@ -4,7 +4,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -13,10 +12,10 @@ using System.IO;
 
 namespace ElGuerre.Items.Api
 {
-	/// <summary>
-	/// API Entry Point
-	/// </summary>
-	public static class Program
+    /// <summary>
+    /// API Entry Point
+    /// </summary>
+    public static class Program
     {
         /// <summary>
         /// Global and main Namespace using acrross the app
@@ -48,7 +47,7 @@ namespace ElGuerre.Items.Api
 
                 host.MigrateDbContext<ItemsContext>((context, services) =>
                 {
-                    var env = services.GetService<IWebHostEnvironment>();
+                    var env = services.GetService<IHostingEnvironment>();
                     var settings = services.GetService<IOptions<AppSettings>>();
                     var logger = services.GetService<ILogger<ItemsContextSeed>>();
 

@@ -16,10 +16,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -35,17 +35,17 @@ using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
-	/// <summary>
-	/// Start up class to set up services, dependency injection and so on.
-	/// </summary>
-	public class Startup
+    /// <summary>
+    /// Start up class to set up services, dependency injection and so on.
+    /// </summary>
+    public class Startup
     {
         public readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _environment;
+        private readonly IHostingEnvironment _environment;
         private readonly ILoggerFactory _loggerFactory;
         public readonly AppSettings _settings;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment environment)
         {
             _configuration = configuration;
             _loggerFactory = loggerFactory;
@@ -61,7 +61,7 @@ namespace ElGuerre.Items.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            var isMock = _environment.IsEnvironment("Mock");            
+            var isMock = _environment.IsEnvironment("Mock");
 
             services
                 .AddCustomApplicationInsights(_configuration)
@@ -79,7 +79,7 @@ namespace ElGuerre.Items.Api
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -114,7 +114,7 @@ namespace ElGuerre.Items.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
 
-            // app.UseMvc();
+            app.UseMvc();
         }
     }
 
@@ -137,7 +137,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IWebHostEnvironment env)
+        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
         {
             services.AddMvc(options =>
             {
@@ -152,14 +152,12 @@ namespace ElGuerre.Items.Api
                     options.Filters.Add(new AuthorizeFilter(policy));
                 }
 
-                options.EnableEndpointRouting = false;
-
                 // Custom Filter to validate BadRequests for all Controllers.
                 options.Filters.Add(typeof(ValidateModelStateFilter));
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-                options.Filters.Add(typeof(ActionLoggingFilter));                
+                options.Filters.Add(typeof(ActionLoggingFilter));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddControllersAsServices();
 
             services.AddCors(options =>
@@ -228,10 +226,7 @@ namespace ElGuerre.Items.Api
 
                     // Changing default behavior when client evaluation occurs to throw. 
                     // Default in EF Core would be to log a warning when client evaluation is performed.
-
-                    // TODO: Remove dureing Migration to net 5.0 
-                    // options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                    
+                    options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
                     //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
                 }
             });
@@ -335,7 +330,7 @@ namespace ElGuerre.Items.Api
         internal static IServiceCollection AddCustomAuthentication(
             this IServiceCollection services,
             ILoggerFactory loggerFactory,
-            IWebHostEnvironment env,
+            IHostingEnvironment env,
             IConfiguration configuration)
         {
             var configSectionName = "AzureAd";

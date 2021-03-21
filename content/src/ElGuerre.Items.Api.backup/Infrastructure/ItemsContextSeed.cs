@@ -14,7 +14,7 @@ namespace ElGuerre.Items.Api.Infrastructure
     public class ItemsContextSeed
     {
         public async Task SeedAsync(ItemsContext dbContext,
-            IWebHostEnvironment env,
+            IHostingEnvironment env,
             IOptions<AppSettings> settings,
             ILogger<ItemsContextSeed> logger)
         {

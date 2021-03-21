@@ -1,59 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-	<PropertyGroup>
-		<TargetFramework>netcoreapp2.2</TargetFramework>
-		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-		<UserSecretsId>3c6faff2-52e0-417a-a2bc-489ddc3b954f</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Copyright>JuanluElGuerre</Copyright>
-		<PackageProjectUrl></PackageProjectUrl>
-		<RepositoryUrl>https://github.com/juanluelguerre/ApiNetCoreBasicTemplate</RepositoryUrl>
-		<RepositoryType>github</RepositoryType>
-		<PackageTags>netcore, templates</PackageTags>
-		<Company>juanluelguerre</Company>
-		<Authors>juanluelguerre</Authors>
-		<Product>ElGuerre.Items.API</Product>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DocumentationFile>obj\Debug\netcoreapp2.2\ElGuerre.Items.Api.xml</DocumentationFile>
-	</PropertyGroup>
-
-
-	<ItemGroup>
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="2.2.4" />
-		<PackageReference Include="AutoMapper" Version="9.0.0" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
-		<PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="1.1.1" />
-		<PackageReference Include="Microsoft.AspNetCore.App">
-		  <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-		  <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
-		</PackageReference>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.AzureADB2C.UI" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-		<PackageReference Include="Polly" Version="7.2.0" />		
-		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-		<PackageReference Include="Serilog" Version="2.9.0" />
-		<PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-		<PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.2.0.14119">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Infrastructure\Middlewares\" />
-		<Folder Include="Infrastructure\Providers\" />
-	</ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>3c6faff2-52e0-417a-a2bc-489ddc3b954f</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Copyright>JuanluElGuerre</Copyright>
+    <PackageProjectUrl>
+    </PackageProjectUrl>
+    <RepositoryUrl>https://github.com/juanluelguerre/ApiNetCoreBasicTemplate</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>netcore, templates</PackageTags>
+    <Company>juanluelguerre</Company>
+    <Authors>juanluelguerre</Authors>
+    <Product>ElGuerre.Items.API</Product>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\net5.0\ElGuerre.Items.Api.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="2.2.4" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="5.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureADB2C.UI" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Polly" Version="7.2.0" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.20.0.28934">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\Middlewares\" />
+    <Folder Include="Infrastructure\Providers\" />
+  </ItemGroup>
 </Project>
