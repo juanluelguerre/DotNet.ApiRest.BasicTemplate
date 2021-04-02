@@ -56,7 +56,7 @@ namespace ElGuerre.Items.Api.Application.Services
                 throw new ArgumentNullException(nameof(model), "Input model cannot be null.");
 
             if (model.Id <= 0)
-                throw new ArgumentException("Item Id cannot be null or empty.", nameof(model.Id));
+                throw new ArgumentException("Item Id cannot be null or empty.");
 
             var entity = new ItemEntity
             {
