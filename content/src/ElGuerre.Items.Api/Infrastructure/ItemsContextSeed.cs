@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api.Infrastructure
 {
-    public class ItemsContextSeed
+	public class ItemsContextSeed
     {
         public async Task SeedAsync(ItemsContext dbContext,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             IOptions<AppSettings> settings,
             ILogger<ItemsContextSeed> logger)
         {
