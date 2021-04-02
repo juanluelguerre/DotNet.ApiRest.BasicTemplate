@@ -40,7 +40,7 @@ other scripts, like ARM (Azure Resource Manager), could be added here.
     - Entity Framework Core for Commands.
     - [Automapper](https://automapper.org/). Optional to map Model/entities.
     - Entity Framework.
-    - HelthChecks.
+    - Health Checks.
     - Authentication using Azure Active Directory(AAD App Registration).
 3. Docker
 4. Kubernetes and Helm
