@@ -4,6 +4,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -47,7 +48,7 @@ namespace ElGuerre.Items.Api
 
                 host.MigrateDbContext<ItemsContext>((context, services) =>
                 {
-                    var env = services.GetService<IHostingEnvironment>();
+                    var env = services.GetService<IWebHostEnvironment>();
                     var settings = services.GetService<IOptions<AppSettings>>();
                     var logger = services.GetService<ILogger<ItemsContextSeed>>();
 

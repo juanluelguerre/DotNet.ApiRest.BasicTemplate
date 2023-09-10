@@ -14,7 +14,7 @@ namespace ElGuerre.Items.Api.Infrastructure.EntityConfigurations
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-               .ForSqlServerUseSequenceHiLo("catalog_brand_hilo")
+               .UseHiLo("catalog_brand_hilo")
                .IsRequired();
 
             builder.Property(cb => cb.Name)

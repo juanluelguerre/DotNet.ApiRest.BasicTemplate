@@ -16,10 +16,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -35,17 +35,17 @@ using System.Threading.Tasks;
 
 namespace ElGuerre.Items.Api
 {
-    /// <summary>
-    /// Start up class to set up services, dependency injection and so on.
-    /// </summary>
-    public class Startup
+	/// <summary>
+	/// Start up class to set up services, dependency injection and so on.
+	/// </summary>
+	public class Startup
     {
         public readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
         private readonly ILoggerFactory _loggerFactory;
         public readonly AppSettings _settings;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment environment)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _loggerFactory = loggerFactory;
@@ -79,7 +79,7 @@ namespace ElGuerre.Items.Api
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -137,7 +137,7 @@ namespace ElGuerre.Items.Api
             return services;
         }
 
-        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IHostingEnvironment env)
+        internal static IServiceCollection AddCustomMVC(this IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddMvc(options =>
             {
@@ -156,8 +156,11 @@ namespace ElGuerre.Items.Api
                 options.Filters.Add(typeof(ValidateModelStateFilter));
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(ActionLoggingFilter));
+
+                // TODO: Review. Required to Upgrade to Net 5.0
+                options.EnableEndpointRouting = false;
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddControllersAsServices();
 
             services.AddCors(options =>
@@ -226,19 +229,20 @@ namespace ElGuerre.Items.Api
 
                     // Changing default behavior when client evaluation occurs to throw. 
                     // Default in EF Core would be to log a warning when client evaluation is performed.
-                    options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                    // options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
                     //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
                 }
             });
 
             return services;
         }
-
-        internal static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+		
+		internal static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
+                // Remove after migration to Net 5.0
+                // options.DescribeAllEnumsAsStrings();
                 options.EnableAnnotations();
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
@@ -330,7 +334,7 @@ namespace ElGuerre.Items.Api
         internal static IServiceCollection AddCustomAuthentication(
             this IServiceCollection services,
             ILoggerFactory loggerFactory,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             IConfiguration configuration)
         {
             var configSectionName = "AzureAd";

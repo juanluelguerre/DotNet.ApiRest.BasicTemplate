@@ -30,7 +30,7 @@ namespace ElGuerre.Items.Api.Infrastructure
             modelBuilder.Model.GetEntityTypes().ToList()
                .ForEach(entityType =>
                {
-                   modelBuilder.Entity(entityType.ClrType).Property("Id").ForSqlServerUseSequenceHiLo(string.Format("{0}SequenceHiLo", entityType.ClrType.Name));
+                   modelBuilder.Entity(entityType.ClrType).Property("Id").UseHiLo(string.Format("{0}SequenceHiLo", entityType.ClrType.Name));
                    modelBuilder.Entity(entityType.ClrType).Property<DateTime?>("LastUpdated");
                    modelBuilder.Entity(entityType.ClrType).Property<DateTime>("CreationDate");
                });

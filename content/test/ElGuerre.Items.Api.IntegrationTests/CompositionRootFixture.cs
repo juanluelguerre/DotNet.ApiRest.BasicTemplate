@@ -39,7 +39,7 @@ namespace ElGuerre.Items.Api.IntegrationTests
 
             _server.Host.MigrateDbContext<ItemsContext>((context, services) =>
             {
-                var env = services.GetService<IHostingEnvironment>();
+                var env = services.GetService<IWebHostEnvironment>();
                 var settings = services.GetService<IOptions<AppSettings>>();
                 var logger = services.GetService<ILogger<ItemsContextSeed>>();
 
