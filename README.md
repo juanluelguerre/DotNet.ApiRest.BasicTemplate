@@ -143,4 +143,4 @@ kubectl apply -f ./k8s/namespace-int.json
 kubectl apply -f ./k8s/namespace-pro.json
 ```
 
-**Note:** Review eazure-pipelines.yml for more detail.
+**Note:** Review azure-pipelines.yml for more detail.
